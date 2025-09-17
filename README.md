@@ -1,2 +1,2 @@
 # web_buhaltyt
-A website for sharing interesting and important information
+Сайт для любых людей любого возраста который открывает множество возможностей и показывает всю красоту окружающего мира
