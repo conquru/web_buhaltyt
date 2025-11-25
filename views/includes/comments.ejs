@@ -1,0 +1,59 @@
+<div class="d-flex">
+    <img src="/<%= users[comment.user].avatar %>" alt="" class="rounded-circle me-2 post-avatar">
+    <div class="flex-grow-1">
+        <h6 class="mb-0"><%= users[comment.user].name %></h6>
+        <p class="text-break m-0"><%= comment.text %></p>
+        <div class="d-flex">
+            <span class="grey flex-grow-1"><%= comment.time %></span>
+            <div class="flex-shrink-1 d-flex">
+                <button class="btn btn-comment <%= comment.isLiked ? 'liked' : '' %>">
+                    <i class="bi bi-heart<%= comment.isLiked ? '-fill' : '' %> like-icon"></i>
+                    <span class="like-count"><%= comment.likes.length > 0 ? comment.likes.length : '' %></span>
+                </button>
+                <button class="btn btn-comment ms-1">
+                    <i class="bi bi-hand-thumbs-down<%= comment.isDisliked ? '-fill' : '' %> like-icon"></i>
+                    <span class="like-count"><%= comment.dislikes.length > 0 ? comment.dislikes.length : '' %></span>
+                </button>
+                <button class="btn btn-comment ms-1">
+                    <i class="bi bi-reply like-icon"></i>
+                    <span class="like-count"><%= comment.children.length > 0 ? comment.children.length : '' %></span>
+                </button>
+            </div>
+        </div>
+        <% if (comment.children.length) {
+            comment.children.forEach((child) => { %>
+                <div class="d-flex">
+                    <img src="/<%= users[child.user].avatar %>" alt="" class="rounded-circle me-2 post-avatar">
+                    <div>
+                        <h6 class="mb-0">
+                            <%= users[child.user].name %>
+                            <span style="font: 0.9rem 'Times New Roman'"><%- '&#9658;' %></span>
+                            <%= users[child.parent].name %>
+                        </h6>
+                        <p class="text-break m-0"><%= child.text %></p>
+                        <div class="d-flex">
+                            <span class="grey flex-grow-1"><%= child.time %></span>
+                            <div class="flex-shrink-1 d-flex">
+                                <button class="btn btn-comment <%= child.isLiked ? 'liked' : '' %>">
+                                    <i class="bi bi-heart<%= child.isLiked ? '-fill' : '' %> like-icon"></i>
+                                    <span class="like-count"><%= child.likes.length > 0 ? child.likes.length : '' %>
+                                    </span>
+                                </button>
+                                <button class="btn btn-comment ms-1">
+                                    <i class="bi bi-hand-thumbs-down<%= child.isDisliked ? '-fill' : '' %> like-icon">
+
+                                    </i>
+                                    <span class="like-count"><%= child.dislikes.length > 0 ? child.dislikes.length : ''
+                                                                %></span>
+                                </button>
+                                <button class="btn btn-comment ms-1">
+                                    <i class="bi bi-reply like-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% })
+        } %>
+    </div>
+</div>

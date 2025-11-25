@@ -1,0 +1,22 @@
+<div class="container form">
+    <div class="row justify-content-center">
+        <form method="post" novalidate>
+            <h2>Вход</h2>
+            <input type="text" name="login" class="form-control rounded-pill mb-2" placeholder="Логин" required
+                   value="<%= formData ? formData.login : '' %>">
+            <div class="position-relative">
+                <input type="password" name="password" id="password"
+                       class="form-control rounded-pill mb-3 pe-5" placeholder="Пароль"
+                       value="<%= formData ? formData.password : '' %>" required>
+                <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-3 eye"
+                        onclick="togglePassword()" id="eye-button">
+                    <i class="bi bi-eye fs-5" id="eye-icon"></i>
+                </button>
+            </div>
+            <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">Войти</button>
+            <% if (error) { %>
+                <div class="alert alert-danger" role="alert"><%= error %></div>
+            <% } %>
+        </form>
+    </div>
+</div>

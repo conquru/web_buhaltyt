@@ -1,0 +1,57 @@
+<div class="card border-2 border-grey rounded-5 col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8 col-xxl-7 mx-auto">
+    <div class="card-header rounded-top-5">
+        <div class="d-flex align-items-center pt-2 pb-1">
+            <img src="/<%= users[post.user].avatar %>" alt="" class="rounded-circle me-2 post-avatar">
+            <h5 class="flex-grow-1 card-title"><%= users[post.user].name %></h5>
+        </div>
+    </div>
+    <div class="card-body pb-2">
+        <% if (post.images.length) { %>
+            <div class="image-grid">
+                <% post.images.forEach((image, _) => { %>
+                    <div class="grid-item">
+                        <img src="/<%= post.user %>/<%= image %>.jpg" class="img-fluid card-img" alt="">
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+        <p class="card-text mt-3 text-break mb-1"><%= post.text %></p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+                <button class="btn btn-like <%= post.isLiked ? 'liked' : '' %>">
+                    <i class="bi bi-heart<%= post.isLiked ? '-fill' : '' %> like-icon"></i>
+                    <span class="like-count"><%= post.likes.length > 0 ? post.likes.length : '' %></span>
+                </button>
+                <button class="btn btn-like ms-1">
+                    <i class="bi bi-hand-thumbs-down<%= post.isDisliked ? '-fill' : '' %> like-icon"></i>
+                    <span class="like-count"><%= post.dislikes.length > 0 ? post.dislikes.length : '' %></span>
+                </button>
+                <button class="btn btn-like ms-1 <%= post.comments.length > 0 ? '' : 'disabled' %>">
+                    <i class="bi bi-chat-left<%= post.isCommentsOpened ? '-fill' : '' %> like-icon"></i>
+                    <span class="like-count"><%= post.comments.length > 0 ? post.comments.length : '' %></span>
+                </button>
+            </div>
+            <div>
+                <span class="grey"><%= post.time %></span>
+            </div>
+        </div>
+        <% if (post.isCommentsOpened && post.comments.length > 0) { %>
+            <hr class="mt-1 mb-2">
+            <div class="overflow-y-auto">
+                <% post.parent_comments.forEach((comment) => { %>
+                    <%- include('comments', {comment: comment}) %>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+    <div class="card-footer rounded-bottom-5">
+        <div class="d-flex align-items-center">
+            <label class="flex-grow-1 me-2">
+                <input class="form-control border-1 rounded-5 pb-2 pt-1 mb-2 mt-2" type="text" placeholder="Комментарий">
+            </label>
+            <button class="btn btn-primary btn-send rounded-circle">
+                <i class="bi bi-send"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="white">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/ico/bootstrap-icons/bootstrap-icons.css">
+        <link rel="stylesheet" href="/css/base.css">
+        <title><%= title %></title>
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <%- include('includes/header') %>
+        <main class="pt-5 my-5 flex-grow-1">
+            <div class="container">
+                <%- body %>
+            </div>
+        </main>
+        <%- include('includes/footer') %>
+        <script src="/js/bootstrap.min.js" defer></script>
+        <script src="/js/bootstrap.bundle.min.js" defer></script>
+        <script src="/js/base.js"></script>
+    </body>
+</html>
