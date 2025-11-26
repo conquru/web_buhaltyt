@@ -8,7 +8,7 @@
     <div class="card-body pb-2">
         <% if (post.images.length) { %>
             <div class="image-grid">
-                <% post.images.forEach((image, _) => { %>
+                <% post.images.forEach((image) => { %>
                     <div class="grid-item">
                         <img src="/<%= post.user %>/<%= image %>.jpg" class="img-fluid card-img" alt="">
                     </div>

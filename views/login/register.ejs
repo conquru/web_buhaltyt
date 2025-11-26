@@ -2,10 +2,10 @@
     <div class="row justify-content-center">
         <form method="post" novalidate>
             <h2>Регистрация</h2>
-            <input type="email" name="email" class="form-control rounded-pill mb-2" placeholder="email" required
-                   value="<%= formData ? formData.email : '' %>">
-            <input type="text" name="name" class="form-control rounded-pill mb-2" placeholder="Имя" required
-                   value="<%= formData ? formData.name : '' %>">
+            <input type="email" name="email" class="form-control rounded-pill mb-2" placeholder="email"
+                   value="<%= formData ? formData.email : '' %>" required>
+            <input type="text" name="username" class="form-control rounded-pill mb-2" placeholder="Имя пользователя"
+                   value="<%= formData ? formData.username : '' %>" required>
             <input type="tel" name="phone" class="form-control rounded-pill mb-2" placeholder="Номер телефона"
                    value="<%= formData ? formData.phone : '' %>" required>
             <div class="position-relative">

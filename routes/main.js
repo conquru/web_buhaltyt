@@ -1,10 +1,12 @@
 const getDiff = require("../src/get-diff-date")
+const likes = require("../src/likes")
 const express = require("express")
 const router = express.Router()
 
-const users = {
+// пример данных, которые должны выходить из БД
+const users = { // только те юзеры, которые потенциально понадобятся для отображения страницы (С АВТОРИЗОВАННЫМ)
     2: {
-        name: "pizdabol",
+        name: "pizdabol", // либо имя, либо ник, выбирайте
         avatar: "img/avatar.png" // тут должна быть base64 аватарка
     },
     3: {
@@ -17,86 +19,61 @@ const users = {
     }
 }
 
+const current_user = users[3] // тут должна быть логика получения авторизованного юзера (мб либа сторонняя)
+
 const child_comment_example = {
-    id: 2,
-    user: 4,
-    text: "старый пердун, какой тебе бухать, к мамке в королёв езжай",
-    parent: 3,
-    likes: [5],
-    dislikes: [],
-    time: getDiff("2025-11-13T12:11:11"),
-    isLiked: true,
-    isDisliked: false,
+    id: 2, // id комментария
+    user: 4, // id автора комментария
+    text: "старый пердун, какой тебе бухать, к мамке в королёв езжай", // текст коммента
+    parent: 3, // id родительского комментария
+    likes: [5], // id юзеров, которые поставили лайк
+    dislikes: [], // id юзеров, которые поставили диз
+    time: getDiff("2025-11-13T12:11:11") // подставляем время из БД и конвертируем функцией
 }
 
 const parent_comment_example = {
-    id: 1,
-    user: 3,
-    text: "вот пидорасы без меня бухаете",
-    likes: [5, 4],
-    dislikes: [9],
-    time: getDiff("2025-11-13T11:11:11"),
-    isLiked: false,
-    isDisliked: true,
-    children: [child_comment_example]
+    id: 1, // id комментария
+    user: 3, // id автора комментария
+    text: "вот пидорасы без меня бухаете", // текст коммента
+    likes: [5, 4], // id юзеров, которые поставили лайк
+    dislikes: [9], // id юзеров, которые поставили диз
+    time: getDiff("2025-11-13T11:11:11"), // подставляем время из БД и конвертируем функцией
+    children: [child_comment_example] // список ВСЕХ дочерних комментов
 }
 
-const post = {
-    id: 1,
-    user: 2,
+const post_example = {
+    id: 1, // id поста
+    user: 2, // id автора поста
     images: [8, 9, 10, 11], // id изображений, находящихся в посте
-    text: "я внебрачный сын тайской шлюхи",
-    likes: [5, 2, 3, 6, 8, 9, 10, 11],
-    dislikes: [4],
-    time: getDiff("2025-11-11T11:11:11"),
+    text: "я внебрачный сын тайской шлюхи", // текст поста
+    likes: [5, 2, 3, 6, 8, 9, 10, 11], // id юзеров, которые поставили лайк
+    dislikes: [4], // id юзеров, которые поставили диз
+    time: getDiff("2025-11-11T11:11:11"), // подставляем время из БД и конвертируем функцией
     comments: [1], // id комментариев у поста
-    isLiked: true,
-    isDisliked: false,
-    isCommentsOpened: true,
-    parent_comments: [parent_comment_example]
+    isCommentsOpened: false, // флаг открытых комментов, по дефолту false
+    parent_comments: [parent_comment_example] // список родительских комментариев поста
 }
 
-router.get("/", (req, res) => res.send("Hello World!"))
-router.get("/index", (req, res) => res.render("index", {title: "buhaltut"}))
-router.get("/post", (req, res) => res.render("includes/post", {title: "post", post: post, users: users}))
-// router.get("/feed", (req, res) => {
-//
-//     // тут должна быть логика получения постов из бд
-//
-//     // структура поста:
-//     const post_example = {
-//         id: 1,
-//         images: [], // id изображений, находящихся в посте
-//         text: "я внебрачный сын тайской шлюхи",
-//         likes: [5, 2, 3],
-//         dislikes: [4],
-//         time: getDiff("2025-11-11T11:11:11"),
-//         comments: [], // id комментариев у поста
-//         user: { // должен быть обязательно объект юзера, а не просто его айдишник
-//             id: 2,
-//             name: "pizdabol",
-//             avatar: "img/avatar.png" // тут должна быть base64 аватарка
-//         },
-//         isLiked: false,
-//         isDisliked: false,
-//         isCommentsOpened: false
-//     }
-//
-//     // результатом должен быть список постов: posts = [post1, post2, ...]
-//     let posts = [post_example]
-//
-//     цикл который отмечает лайкнут пост или нет
-//     posts.forEach((post) => {
-//         if (current_user.id in post.likes) {
-//             post.isLiked = true
-//             post.isDisliked = false
-//         } else if (current_user.id in post.dislikes) {
-//             post.isLiked = false
-//             post.isDisliked = true
-//         }
-//     })
-//
-//     res.render("/feed", {title: "Лента", post: posts})
-// })
+router.get("/", (req, res) => res.render("index", {title: "Главная"}))
+
+router.get("/feed", (req, res) => {
+    // тут должна быть логика получения постов из бд
+    // результатом должен быть список постов: posts = [post1, post2, ...]
+    let posts = [post_example]
+
+    // цикл, который отмечает лайкнут/дизлайкнут пост/коммент или нет
+    posts.forEach((post) => {
+        likes(post, current_user) // происходит мутация объекта
+
+        if (post.isCommentsOpened) {
+            post.parent_comments.forEach(parent => {
+                likes(parent, current_user)
+                parent.children.forEach((child) => likes(child, current_user))
+            })
+        }
+    })
+
+    res.render("feed", {title: "Лента", posts: posts, users: users})
+})
 
 module.exports = router

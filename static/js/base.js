@@ -3,11 +3,6 @@ function togglePassword() {
     const eyeIcon = document.getElementById('eye-icon')
     const eyeButton = document.getElementById('eye-button')
 
-    eyeButton.style.transform = 'scale(0.8)'
-    setTimeout(() => {
-        eyeButton.style.transform = 'scale(1)'
-    }, 150)
-
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text'
         eyeIcon.className = 'bi bi-eye-slash fs-5'

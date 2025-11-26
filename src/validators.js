@@ -12,8 +12,8 @@ function registerValidator(body) {
         return "Введите email"
     } else if (!body.name.trim()) {
         return "Введите имя"
-    } else if (!body.phone.trim()) {
-        return "Введите номер телефона"
+    } else if (!body.username.trim()) {
+        return "Введите имя пользователя"
     } else if (!body.password.trim()) {
         return "Введите пароль"
     } else if (body.password.trim().length < 8) {
@@ -22,4 +22,4 @@ function registerValidator(body) {
     return null
 }
 
-module.exports = { loginValidator, registerValidator }
+module.exports = {loginValidator, registerValidator}
