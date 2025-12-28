@@ -1,6 +1,7 @@
 const getDiff = require("../src/get-diff-date")
 const likes = require("../src/likes")
 const express = require("express")
+const wss = require("../src/websocket")
 const router = express.Router()
 
 // пример данных, которые должны выходить из БД
@@ -54,7 +55,7 @@ const post_example = {
     parent_comments: [parent_comment_example] // список родительских комментариев поста
 }
 
-router.get("/", (req, res) => res.render("index", {title: "Главная"}))
+router.get("/", (req, res) => res.render("index", {title: "Главная", websocket: false}))
 
 router.get("/feed", (req, res) => {
     // тут должна быть логика получения постов из бд
@@ -73,7 +74,11 @@ router.get("/feed", (req, res) => {
         }
     })
 
-    res.render("feed", {title: "Лента", posts: posts, users: users})
+    if (wss.check_ip(req)) {
+        res.render("feed", {title: "Лента", posts: posts, users: users, websocket: true})
+    } else {
+        res.sendStatus(429)
+    }
 })
 
 module.exports = router
