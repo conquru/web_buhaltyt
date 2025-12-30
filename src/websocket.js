@@ -13,8 +13,18 @@ function init_wss(server) {
         console.log(`подключился клиент с ip ${ip}, кол-во подключений ${count_ip}, подключений всего: ${clients.length}`)
         ws.send(`подключение ${count_ip}`)
 
-        ws.on("message", (data) => {
-            console.log(data.toString())
+        ws.lastUserPing = Date.now()
+        ws.state = "visible"
+
+        ws.on("message", (msg) => {
+            const data = JSON.parse(msg)
+
+            if (data.type === "activity") {
+                ws.lastUserPing = Date.now()
+                ws.state = data.state
+            } else {
+                console.log(data.toString())
+            }
         })
 
         ws.on("close", () => {
@@ -25,11 +35,18 @@ function init_wss(server) {
             console.log(`отключился клиент с ip ${ip}, кол-во подключений ${count_ip}, подключений всего: ${clients.length}`)
         })
     })
+
+    setInterval(() => {
+        wss.clients.forEach((ws) => {
+            if (Date.now() - ws.lastUserPing > 60 * 60 * 1000) return ws.close(4000, "inactive")
+            if (ws.state !== "visible") return ws.close(4000, "inactive")
+        })
+    }, 10 * 1000) // поменять на минуту
 }
 
 function check_ip(req) {
     const ip = req.socket.remoteAddress
-    return (ipConnections.get(ip) || 0) < 5;
+    return (ipConnections.get(ip) || 0) < 5
 }
 
 module.exports = {init_wss, check_ip}
