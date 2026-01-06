@@ -6,18 +6,18 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/ico/bootstrap-icons/bootstrap-icons.css">
         <link rel="stylesheet" href="/css/base.css">
-        <title><%= title %></title>
+        {% block css %}{% endblock %}
+        <title>{{ title }}</title>
     </head>
-    <body class="d-flex flex-column min-vh-100" data-websocket="<%= websocket %>">
-        <%- include('includes/header') %>
+    <body class="d-flex flex-column min-vh-100" data-websocket="{{ websocket }}">
+        {% include "includes/header.njk" %}
         <main class="pt-5 my-5 flex-grow-1">
-            <div class="container">
-                <%- body %>
-            </div>
+            {% block content %}{% endblock %}
         </main>
-        <%- include('includes/footer') %>
-        <script src="/js/bootstrap.min.js" defer></script>
+        {% include "includes/footer.njk" %}
         <script src="/js/bootstrap.bundle.min.js" defer></script>
         <script src="/js/base.js"></script>
+{#        <script src="/js/wss.js"></script>#}
+        {% block js %}{% endblock %}
     </body>
 </html>
