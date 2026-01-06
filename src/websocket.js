@@ -11,17 +11,24 @@ function init_wss(server) {
         ipConnections.set(ip, count_ip)
         clients.push(ws)
         console.log(`подключился клиент с ip ${ip}, кол-во подключений ${count_ip}, подключений всего: ${clients.length}`)
-        ws.send(`подключение ${count_ip}`)
+        ws.send(JSON.stringify(`подключение ${count_ip}`))
 
         ws.lastUserPing = Date.now()
         ws.state = "visible"
 
         ws.on("message", (msg) => {
             const data = JSON.parse(msg)
+            let users = ["kosyanov", "kobanyok"] // заменить на sql
 
             if (data.type === "activity") {
                 ws.lastUserPing = Date.now()
                 ws.state = data.state
+            } else if (data.type === "unique") {
+                if (data.field === "username") {
+                    data.err = users.includes(data.value)
+                    // data.err = validator(data.value)
+                    ws.send(JSON.stringify(data))
+                }
             } else {
                 console.log(data.toString())
             }
