@@ -1,8 +1,18 @@
 const getDiff = require("../src/get-diff-date")
 const likes = require("../src/likes")
 const express = require("express")
+const multer = require("multer")
+const { v4: uuid } = require("uuid")
+const sharp = require("sharp")
+const path = require("path")
+
 const wss = require("../src/websocket")
 const router = express.Router()
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 500 * 1024 }
+})
 
 // пример данных, которые должны выходить из БД
 const users = { // только те юзеры, которые потенциально понадобятся для отображения страницы (С АВТОРИЗОВАННЫМ)
@@ -82,5 +92,33 @@ router.get("/feed", (req, res) => {
 })
 
 router.get("/upload", (req, res) => res.render("upload", {title: "Новый пост"}))
+router.post("/upload", upload.any(), async (req, res) => {
+    const saved = []
+
+    for (const file of req.files) {
+        const filename = uuid() + ".webp"
+        const outPath = path.join("media", filename)
+        const tmbPath = path.join("media", "tmb_" + filename)
+
+        await sharp(file.buffer)
+            .rotate()
+            .resize(1920, 1920, { fit: "inside", withoutEnlargement: true })
+            .webp({ quality: 80 })
+            .toFile(outPath)
+
+        await sharp(file.buffer)
+            .resize(400, 400, { fit: "cover" })
+            .webp({ quality: 70 })
+            .toFile(tmbPath)
+
+        saved.push(filename)
+    }
+
+    // добавить обработку ошибок, fetch, создание media
+    // saved -> db
+    console.log(saved)
+
+    res.redirect("/feed")
+})
 
 module.exports = router
