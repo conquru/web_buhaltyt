@@ -81,4 +81,6 @@ router.get("/feed", (req, res) => {
     }
 })
 
+router.get("/upload", (req, res) => res.render("upload", {title: "Новый пост"}))
+
 module.exports = router

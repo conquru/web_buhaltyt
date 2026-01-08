@@ -1,5 +1,9 @@
 {% extends "base.njk" %}
 
+{% block css %}
+    <link rel="stylesheet" href="/css/feed.css">
+{% endblock %}
+
 {% block content %}
     {% for post in posts %}
         {% include "includes/post.njk" %}
