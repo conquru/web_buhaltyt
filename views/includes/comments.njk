@@ -35,10 +35,13 @@
                         <div class="flex-shrink-1 d-flex">
                             <button class="btn btn-comment {{ 'liked' if child.isLiked else '' }}">
                                 <i class="bi bi-heart{{ '-fill' if child.isLiked else '' }} like-icon"></i>
-                                <span class="like-count">{{ child.likes.length if child.likes.length > 0 else '' }}</span>
+                                <span class="like-count">
+                                    {{ child.likes.length if child.likes.length > 0 else '' }}
+                                </span>
                             </button>
                             <button class="btn btn-comment ms-1">
-                                <i class="bi bi-hand-thumbs-down{{ '-fill' if child.isDisliked else '' }} like-icon"></i>
+                                <i class="bi bi-hand-thumbs-down{{ '-fill' if child.isDisliked else '' }} like-icon">
+                                </i>
                                 <span class="like-count">
                                     {{ child.dislikes.length if child.dislikes.length > 0 else '' }}
                                 </span>

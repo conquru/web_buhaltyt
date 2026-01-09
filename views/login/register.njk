@@ -9,6 +9,7 @@
         <div class="row justify-content-center">
             <form method="post" id="form" novalidate>
                 <h2>Регистрация</h2>
+                <label for="email" class="visually-hidden">email</label>
                 <input
                         type="email"
                         name="email"
@@ -18,6 +19,7 @@
                         value="{{ formData.email }}"
                         required
                 >
+                <label for="username" class="visually-hidden">Имя пользователя</label>
                 <input
                         type="text"
                         name="username"
@@ -27,6 +29,7 @@
                         value="{{ formData.username }}"
                         required
                 >
+                <label for="phone" class="visually-hidden">Номер телефона</label>
                 <input
                         type="tel"
                         name="phone"
@@ -37,6 +40,7 @@
                         required
                 >
                 <div class="position-relative">
+                    <label for="password" class="visually-hidden">Пароль</label>
                     <input
                             type="password"
                             name="password"

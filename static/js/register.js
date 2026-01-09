@@ -12,6 +12,13 @@ username.addEventListener("input", () => {
 
 form.addEventListener("submit", e => {
     e.preventDefault()
+
+    if (!form.checkValidity()) {
+        error.innerHTML = "Заполните все поля"
+        error.hidden = false
+        return
+    }
+
     const data = Object.fromEntries(new FormData(form))
     fetch("/register", {
         method: "POST",

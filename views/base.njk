@@ -12,7 +12,9 @@
     <body class="d-flex flex-column min-vh-100" data-websocket="{{ websocket }}">
         {% include "includes/header.njk" %}
         <main class="pt-5 my-5 flex-grow-1">
-            {% block content %}{% endblock %}
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
         </main>
         {% include "includes/footer.njk" %}
         <script src="/js/bootstrap.bundle.min.js" defer></script>
