@@ -33,8 +33,9 @@ function initWebSocket() {
     ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.type === "unique") {
-            const field = document.getElementById(data.field + "-err")
-            field.textContent = data.err ? "это имя уже занято" : ""
+            const field = document.getElementById("error")
+            field.innerHTML = data.err ? "это имя уже занято" : ""
+            field.hidden = !data.err
         } else {
             console.log(data)
         }

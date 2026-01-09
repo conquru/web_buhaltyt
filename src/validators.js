@@ -1,28 +1,4 @@
 function loginValidator(body) {
-    if (!body.login.trim()) {
-        return "Введите логин"
-    } else if (!body.password) {
-        return "Введите пароль"
-    }
-    return null
-}
-
-function registerValidator(body) {
-    if (!body.email.trim()) {
-        return "Введите email"
-    } else if (!body.name.trim()) {
-        return "Введите имя"
-    } else if (!body.username.trim()) {
-        return "Введите имя пользователя"
-    } else if (!body.password.trim()) {
-        return "Введите пароль"
-    } else if (body.password.trim().length < 8) {
-        return "Пароль слишком короткий"
-    }
-    return null
-}
-
-function checkLogin(body) {
     // тестовая вариация 
     const users = [
         { login: "pisa", password: "123456" },
@@ -33,39 +9,50 @@ function checkLogin(body) {
     )
 
     if (!isValid) {
-        return false
+        return "Неверный логин или пароль"
     }
-    return true
+    return null
 
     // как должно быть
     // if (!loginVerification(body.login, body.password)){ // loginVerification - функция которая откравляет запрос на проверку корректности данных введеных пользователем
-    //     return false
+    //     return "Неверный логин или пароль"
     // }
+    // return null
 }
 
-function checkRegister(body) {
+function registerValidator(body) {
     // тестовая вариация 
     const logins = ["pisa", "popa"]
     const emails = ["pisa@mail.com", "popa@mail.com"]
-
-    if (logins.includes(body.logit)) {
-        return false
-    }
+    const phones = ["89135235801", "89135235822"]
 
     if (emails.includes(body.email)) {
-        return false
+        return "Пользователь с такой почтой уже зарегистрирован"
     }
 
-    return true
+    if (phones.includes(body.phone)) {
+        return "Пользователь с таким телефоном уже зарегистрирован"
+    }
+
+    if (logins.includes(body.username)) {
+        return "Пользователь с таким логином уже зарегистрирован"
+    } // если wss пизда
+
+    return null
 
     // как должно быть
-    // if (!checkLogin(body.logit)){ // checkLogin - функция которая проверяет уникальность логина
-    //     return false
-    // }
 
     // if (!checkEmail(body.email)){ // checkEmail - функция которая проверяет уникальность почты
     //     return false
     // }
+
+    // if (!checkPhone(body.phone)){ // checkPhone - функция которая проверяет уникальность телефона
+    //     return false
+    // }
+
+    // if (!checkUsername(body.username)){ // checkUsername - функция которая проверяет уникальность логина
+    //     return false
+    // } // если wss пизда
 }
 
-module.exports = {loginValidator, registerValidator, checkLogin}
+module.exports = {loginValidator, registerValidator}

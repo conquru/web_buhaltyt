@@ -1,10 +1,19 @@
 const form = document.getElementById("form")
 const error = document.getElementById("error")
+const username = document.getElementById("username")
+
+username.addEventListener("input", () => {
+    ws.send(JSON.stringify({
+        type: "unique",
+        field: username.id,
+        value: username.value
+    }))
+})
 
 form.addEventListener("submit", e => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(form))
-    fetch("/login", {
+    fetch("/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

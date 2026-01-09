@@ -18,7 +18,7 @@ function init_wss(server) {
 
         ws.on("message", (msg) => {
             const data = JSON.parse(msg)
-            let users = ["kosyanov", "kobanyok"] // заменить на sql
+            let users = ["pisa", "popa"] // заменить на sql
 
             if (data.type === "activity") {
                 ws.lastUserPing = Date.now()
@@ -26,7 +26,7 @@ function init_wss(server) {
             } else if (data.type === "unique") {
                 if (data.field === "username") {
                     data.err = users.includes(data.value)
-                    // data.err = validator(data.value)
+                    // data.err = checkUsername(data.value) // работа с бд
                     ws.send(JSON.stringify(data))
                 }
             } else {

@@ -1,15 +1,14 @@
 {% extends "base.njk" %}
 
 {% block js %}
-    <script src="/js/login.js"></script>
+    <script src="/js/register.js"></script>
 {% endblock %}
 
 {% block content %}
     <div class="container form">
         <div class="row justify-content-center">
-            <form method="post" novalidate>
+            <form method="post" id="form" novalidate>
                 <h2>Регистрация</h2>
-                <label for="email" id="email-err"></label>
                 <input
                         type="email"
                         name="email"
@@ -19,7 +18,6 @@
                         value="{{ formData.email }}"
                         required
                 >
-                <label for="username" id="username-err"></label>
                 <input
                         type="text"
                         name="username"
@@ -29,7 +27,6 @@
                         value="{{ formData.username }}"
                         required
                 >
-                <label for="phone" id="phone-err"></label>
                 <input
                         type="tel"
                         name="phone"
@@ -40,7 +37,6 @@
                         required
                 >
                 <div class="position-relative">
-                    <label for="password" id="password-err"></label>
                     <input
                             type="password"
                             name="password"
@@ -62,9 +58,7 @@
                 <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">
                     Зарегистрироваться
                 </button>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
+                <div class="alert alert-danger" id="error" role="alert" hidden></div>
             </form>
         </div>
     </div>

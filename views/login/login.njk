@@ -7,11 +7,12 @@
 {% block content %}
 <div class="container form">
     <div class="row justify-content-center">
-        <form method="post" novalidate>
+        <form method="post" id="form" novalidate>
             <h2>Вход</h2>
             <input
                     type="text"
                     name="login"
+                    id="login"
                     class="form-control rounded-pill mb-2"
                     placeholder="Логин"
                     value="{{ formData.login }}"
@@ -39,9 +40,7 @@
             <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">
                 Войти
             </button>
-            {% if error %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endif %}
+            <div class="alert alert-danger" id="error" role="alert" hidden></div>
         </form>
     </div>
 </div>
