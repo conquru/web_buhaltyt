@@ -22,4 +22,50 @@ function registerValidator(body) {
     return null
 }
 
-module.exports = {loginValidator, registerValidator}
+function checkLogin(body) {
+    // тестовая вариация 
+    const users = [
+        { login: "pisa", password: "123456" },
+        { login: "popa", password: "qwerty" }
+    ]
+    const isValid = users.some(
+        u => u.login === body.login && u.password === body.password
+    )
+
+    if (!isValid) {
+        return false
+    }
+    return true
+
+    // как должно быть
+    // if (!loginVerification(body.login, body.password)){ // loginVerification - функция которая откравляет запрос на проверку корректности данных введеных пользователем
+    //     return false
+    // }
+}
+
+function checkRegister(body) {
+    // тестовая вариация 
+    const logins = ["pisa", "popa"]
+    const emails = ["pisa@mail.com", "popa@mail.com"]
+
+    if (logins.includes(body.logit)) {
+        return false
+    }
+
+    if (emails.includes(body.email)) {
+        return false
+    }
+
+    return true
+
+    // как должно быть
+    // if (!checkLogin(body.logit)){ // checkLogin - функция которая проверяет уникальность логина
+    //     return false
+    // }
+
+    // if (!checkEmail(body.email)){ // checkEmail - функция которая проверяет уникальность почты
+    //     return false
+    // }
+}
+
+module.exports = {loginValidator, registerValidator, checkLogin}
