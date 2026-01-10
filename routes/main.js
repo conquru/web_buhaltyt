@@ -1,33 +1,25 @@
 const getDiff = require("../src/get-diff-date")
 const likes = require("../src/likes")
 const express = require("express")
-const multer = require("multer")
-const { v4: uuid } = require("uuid")
-const sharp = require("sharp")
-const path = require("path")
 
 const wss = require("../src/websocket")
 const router = express.Router()
 
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 500 * 1024 }
-})
-
 // пример данных, которые должны выходить из БД
-const users = { // только те юзеры, которые потенциально понадобятся для отображения страницы (С АВТОРИЗОВАННЫМ)
+const users = {
+    // только те юзеры, которые потенциально понадобятся для отображения страницы (С АВТОРИЗОВАННЫМ)
     2: {
         name: "pizdabol", // либо имя, либо ник, выбирайте
-        avatar: "img/avatar.png" // тут должна быть base64 аватарка
+        avatar: "img/avatar.png", // тут должна быть base64 аватарка
     },
     3: {
         name: "kosyanov",
-        avatar: "img/avatar.png"
+        avatar: "img/avatar.png",
     },
     4: {
         name: "kabanyok",
-        avatar: "img/avatar.png"
-    }
+        avatar: "img/avatar.png",
+    },
 }
 
 const current_user = users[3] // тут должна быть логика получения авторизованного юзера (мб либа сторонняя)
@@ -39,7 +31,7 @@ const child_comment_example = {
     parent: 3, // id родительского комментария
     likes: [5], // id юзеров, которые поставили лайк
     dislikes: [], // id юзеров, которые поставили диз
-    time: getDiff("2025-11-13T12:11:11") // подставляем время из БД и конвертируем функцией
+    time: getDiff("2025-11-13T12:11:11"), // подставляем время из БД и конвертируем функцией
 }
 
 const parent_comment_example = {
@@ -49,7 +41,7 @@ const parent_comment_example = {
     likes: [5, 4], // id юзеров, которые поставили лайк
     dislikes: [9], // id юзеров, которые поставили диз
     time: getDiff("2025-11-13T11:11:11"), // подставляем время из БД и конвертируем функцией
-    children: [child_comment_example] // список ВСЕХ дочерних комментов
+    children: [child_comment_example], // список ВСЕХ дочерних комментов
 }
 
 const post_example = {
@@ -62,10 +54,10 @@ const post_example = {
     time: getDiff("2025-11-11T11:11:11"), // подставляем время из БД и конвертируем функцией
     comments: [1], // id комментариев у поста
     isCommentsOpened: false, // флаг открытых комментов, по дефолту false
-    parent_comments: [parent_comment_example] // список родительских комментариев поста
+    parent_comments: [parent_comment_example], // список родительских комментариев поста
 }
 
-router.get("/", (req, res) => res.render("index", {title: "Главная", websocket: false}))
+router.get("/", (req, res) => res.render("index", { title: "Главная", websocket: false }))
 
 router.get("/feed", (req, res) => {
     // тут должна быть логика получения постов из бд
@@ -77,7 +69,7 @@ router.get("/feed", (req, res) => {
         likes(post, current_user) // происходит мутация объекта
 
         if (post.isCommentsOpened) {
-            post.parent_comments.forEach(parent => {
+            post.parent_comments.forEach((parent) => {
                 likes(parent, current_user)
                 parent.children.forEach((child) => likes(child, current_user))
             })
@@ -85,40 +77,10 @@ router.get("/feed", (req, res) => {
     })
 
     if (wss.check_ip(req)) {
-        res.render("feed", {title: "Лента", posts: posts, users: users, websocket: true})
+        res.render("feed", { title: "Лента", posts: posts, users: users, websocket: true })
     } else {
         res.sendStatus(429)
     }
-})
-
-router.get("/upload", (req, res) => res.render("upload", {title: "Новый пост"}))
-router.post("/upload", upload.any(), async (req, res) => {
-    const saved = []
-
-    for (const file of req.files) {
-        const filename = uuid() + ".webp"
-        const outPath = path.join("media", filename)
-        const tmbPath = path.join("media", "tmb_" + filename)
-
-        await sharp(file.buffer)
-            .rotate()
-            .resize(1920, 1920, { fit: "inside", withoutEnlargement: true })
-            .webp({ quality: 80 })
-            .toFile(outPath)
-
-        await sharp(file.buffer)
-            .resize(400, 400, { fit: "cover" })
-            .webp({ quality: 70 })
-            .toFile(tmbPath)
-
-        saved.push(filename)
-    }
-
-    // добавить обработку ошибок, fetch, создание media
-    // saved -> db
-    console.log(saved)
-
-    res.redirect("/feed")
 })
 
 module.exports = router

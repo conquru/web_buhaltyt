@@ -4,19 +4,18 @@ let reconnectTimer
 
 function send(state) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({
-            type: "activity",
-            state,
-            ts: Date.now()
-        }))
+        ws.send(
+            JSON.stringify({
+                type: "activity",
+                state,
+                ts: Date.now(),
+            }),
+        )
     }
 }
 
 function initWebSocket() {
-    if (ws && (
-        ws.readyState === WebSocket.OPEN ||
-        ws.readyState === WebSocket.CONNECTING
-    )) return
+    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return
 
     ws = new WebSocket("ws://localhost:3000")
 

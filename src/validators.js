@@ -1,12 +1,10 @@
 function loginValidator(body) {
-    // тестовая вариация 
+    // тестовая вариация
     const users = [
         { login: "pisa", password: "123456" },
-        { login: "popa", password: "qwerty" }
+        { login: "popa", password: "qwerty" },
     ]
-    const isValid = users.some(
-        u => u.login === body.login && u.password === body.password
-    )
+    const isValid = users.some((u) => u.login === body.login && u.password === body.password)
 
     if (!isValid) {
         return "Неверный логин или пароль"
@@ -21,7 +19,7 @@ function loginValidator(body) {
 }
 
 function registerValidator(body) {
-    // тестовая вариация 
+    // тестовая вариация
     const logins = ["pisa", "popa"]
     const emails = ["pisa@mail.com", "popa@mail.com"]
     const phones = ["89135235801", "89135235822"]
@@ -55,4 +53,4 @@ function registerValidator(body) {
     // } // если wss пизда
 }
 
-module.exports = {loginValidator, registerValidator}
+module.exports = { loginValidator, registerValidator }

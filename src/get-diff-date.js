@@ -2,7 +2,7 @@ function timeAgo(value, unit) {
     const units = {
         min: ["минуту", "минуты", "минут"],
         hour: ["час", "часа", "часов"],
-        day: ["день", "дня", "дней"]
+        day: ["день", "дня", "дней"],
     }
 
     if (value === 1) {
@@ -30,10 +30,21 @@ function timeAgo(value, unit) {
     return `${value} ${wordForm} назад`
 }
 
-
 function getDiff(timestamp) {
-    const months = ["января", "февраля", "марта", "апреля", "мая", "июня",
-        "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+    const months = [
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
+    ]
     const date = new Date(timestamp)
     const now = new Date()
     const diff = (now - date) / 1000
