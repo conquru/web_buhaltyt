@@ -4,19 +4,18 @@ let reconnectTimer
 
 function send(state) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({
-            type: "activity",
-            state,
-            ts: Date.now()
-        }))
+        ws.send(
+            JSON.stringify({
+                type: "activity",
+                state,
+                ts: Date.now(),
+            }),
+        )
     }
 }
 
 function initWebSocket() {
-    if (ws && (
-        ws.readyState === WebSocket.OPEN ||
-        ws.readyState === WebSocket.CONNECTING
-    )) return
+    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return
 
     ws = new WebSocket("ws://localhost:3000")
 
@@ -36,6 +35,20 @@ function initWebSocket() {
             const field = document.getElementById("error")
             field.innerHTML = data.err ? "это имя уже занято" : ""
             field.hidden = !data.err
+        } else if (data.type === "password") {
+            const field = document.getElementById("error")
+            const progress = document.getElementById("progress")
+            const color = {
+                "red": ["#ef4444", "#f97316"],
+                "orange": ["#f97316", "#facc15"],
+                "green": ["#22c55e", "#16a34a"],
+            }
+            field.innerHTML = data.err
+            field.hidden = !data.err
+            progress.hidden = false
+            progress.setAttribute("value", data.progress)
+            progress.style.setProperty("--c1", color[data.color][0])
+            progress.style.setProperty("--c2", color[data.color][1])
         } else {
             console.log(data)
         }

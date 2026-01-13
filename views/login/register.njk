@@ -1,5 +1,9 @@
 {% extends "base.njk" %}
 
+{% block css %}
+    <link rel="stylesheet" href="/css/register.css">
+{% endblock %}
+
 {% block js %}
     <script src="/js/register.js"></script>
 {% endblock %}
@@ -14,7 +18,7 @@
                         type="email"
                         name="email"
                         id="email"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control rounded-top mb-2"
                         placeholder="email"
                         value="{{ formData.email }}"
                         required
@@ -24,7 +28,7 @@
                         type="text"
                         name="username"
                         id="username"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control rounded-top mb-2"
                         placeholder="Имя пользователя"
                         value="{{ formData.username }}"
                         required
@@ -34,7 +38,7 @@
                         type="tel"
                         name="phone"
                         id="phone"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control rounded-top mb-2"
                         placeholder="Номер телефона"
                         value="{{ formData.phone }}"
                         required
@@ -45,7 +49,8 @@
                             type="password"
                             name="password"
                             id="password"
-                            class="form-control rounded-pill mb-3 pe-5"
+                            {# class="form-control rounded-top mb-0 pe-5" #}
+                            class="form-control rounded-top password-input pe-5"
                             placeholder="Пароль"
                             value="{{ formData.password }}"
                             required
@@ -59,7 +64,9 @@
                         <i class="bi bi-eye fs-5" id="eye-icon"></i>
                     </button>
                 </div>
-                <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">
+                {# <progress id="progress" value="0" max="100" class="progress mt-0 mb-1" hidden></progress> #}
+                <progress id="progress" value="0" max="100" class="password-progress" hidden></progress>
+                <button type="submit" class="btn btn-primary rounded-top form-control mb-2 mt-1">
                     Зарегистрироваться
                 </button>
                 <div class="alert alert-danger" id="error" role="alert" hidden></div>

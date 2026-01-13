@@ -2,6 +2,7 @@
 .vscode/
 db/
 media/
+.history/
 
 # Logs
 logs

@@ -4,6 +4,7 @@ const submitBtn = document.getElementById("btn-submit")
 const imageBtn = document.getElementById("btn-image")
 const imageField = document.getElementById("image")
 const previewImg = document.getElementById("preview-img")
+const error = document.getElementById("error")
 
 function adjustHeight(el) {
     el.style.height = "auto"
@@ -26,8 +27,25 @@ submitBtn.addEventListener("click", (e) => {
 
 imageField.addEventListener("change", () => {
     previewImg.innerHTML = ""
+    error.textContent = ""
+    error.hidden = true
 
-    Array.from(imageField.files).forEach(file => {
+    Array.from(imageField.files).forEach((file) => {
+        if (!file.type.startsWith("image/")) {
+            error.textContent = "Файл не является изображением"
+            error.hidden = false
+            imageField.value = ""
+            previewImg.innerHTML = ""
+            return
+        }
+        if (file.size > 500 * 1024) {
+            error.textContent = "Файл слишком большой"
+            error.hidden = false
+            imageField.value = ""
+            previewImg.innerHTML = ""
+            return
+        }
+
         const img = document.createElement("img")
 
         img.src = URL.createObjectURL(file)

@@ -1,0 +1,14 @@
+.idea/
+.vscode/
+db/
+media/
+.history/
+node_modules/
+static/css/
+static/ico/
+static/img/
+static/js/bootstrap.bundle.min.js
+static/js/bootstrap.bundle.min.js.map
+static/js/bootstrap.min.js
+static/js/bootstrap.min.js.map
+views/
