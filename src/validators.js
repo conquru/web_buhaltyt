@@ -38,9 +38,29 @@ function loginValidator(body) {
     return null
 
     // как должно быть
-    // if (!loginVerification(body.login, body.password)){ // loginVerification - функция которая откравляет запрос на проверку корректности данных введеных пользователем
-    //     return "Неверный логин или пароль"
+    // const nickname = body.login
+    // const password = body.password
+    // const number = conversion(nickname)
+
+    // if (number) {
+    //     const validPhone = users.some((user) => user.number === number && user.password === password)
+
+    //     if ((!phoneVerification(validPhone, body.password)){ // loginVerification(телефон + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
+    //         return "Неверный логин или пароль"
+    //     }
+        
+    // } else if (nickname.includes("@")) {
+        
+    //     if ((!emailVerification(validPhone, body.password)){ // loginVerification(почта + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
+    //         return "Неверный логин или пароль"
+    //     }
+
+    // } else {
+    //     if ((!loginVerification(validPhone, body.password)){ // loginVerification(логин + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
+    //         return "Неверный логин или пароль"
+    //     }
     // }
+
     // return null
 }
 

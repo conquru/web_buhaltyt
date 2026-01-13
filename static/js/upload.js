@@ -31,15 +31,15 @@ imageField.addEventListener("change", () => {
     error.hidden = true
 
     Array.from(imageField.files).forEach((file) => {
-        if (file.size > 500 * 1024) {
-            error.textContent = "Файл слишком большой"
+        if (!file.type.startsWith("image/")) {
+            error.textContent = "Файл не является изображением"
             error.hidden = false
             imageField.value = ""
             previewImg.innerHTML = ""
             return
         }
-        if (!file.type.startsWith("image/")) {
-            error.textContent = "Файл не является изображением"
+        if (file.size > 500 * 1024) {
+            error.textContent = "Файл слишком большой"
             error.hidden = false
             imageField.value = ""
             previewImg.innerHTML = ""

@@ -1,6 +1,7 @@
 const form = document.getElementById("form")
 const error = document.getElementById("error")
 const username = document.getElementById("username")
+const password = document.getElementById("password")
 
 username.addEventListener("input", () => {
     ws.send(
@@ -11,6 +12,16 @@ username.addEventListener("input", () => {
         }),
     )
 })
+
+password.addEventListener("input", () => {
+    ws.send(
+        JSON.stringify({
+            type: "password",
+            field: password.id,
+            value: password.value,
+        }),
+    )
+}) 
 
 form.addEventListener("submit", (e) => {
     e.preventDefault()

@@ -1,6 +1,7 @@
 const WebSocket = require("ws")
 const ipConnections = new Map()
 const clients = []
+const { levelPassword } = require("../src/check-password")
 
 function init_wss(server) {
     const wss = new WebSocket.Server({ server })
@@ -25,6 +26,17 @@ function init_wss(server) {
             if (data.type === "activity") {
                 ws.lastUserPing = Date.now()
                 ws.state = data.state
+            } else if (data.type === "password") {
+                const level = levelPassword(data.value)
+                if (level === "red") {
+                    data.progress = "33"
+                } else if (level === "orange") {
+                    data.progress = "66"
+                } else {
+                    data.progress = "100"
+                }
+                data.color = level
+                ws.send(JSON.stringify(data))
             } else if (data.type === "unique") {
                 if (data.field === "username") {
                     data.err = users.includes(data.value)
