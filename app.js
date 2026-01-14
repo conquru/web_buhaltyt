@@ -8,9 +8,9 @@ const nunjucks = require("nunjucks")
 
 const main_router = require("./routes/main")
 const login_router = require("./routes/login")
-const register_router = require("./routes/register")
 const upload_router = require("./routes/upload")
-const wss = require("./src/websocket")
+const account_router = require("./routes/account")
+const register_router = require("./routes/register")
 
 const app = express()
 const env = nunjucks.configure("views", {
@@ -20,6 +20,10 @@ const env = nunjucks.configure("views", {
     express: app,
     watch: true,
     noCache: true, // only for dev
+})
+
+env.addFilter("merge", (a, b) => {
+    return { ...a, ...b }
 })
 
 app.set("view engine", "njk")
@@ -36,7 +40,8 @@ app.use(express.static("media"))
 
 app.use("/", main_router)
 app.use("/", login_router)
-app.use("/", register_router)
 app.use("/", upload_router)
+app.use("/", account_router)
+app.use("/", register_router)
 
 module.exports = app

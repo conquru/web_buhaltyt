@@ -3,7 +3,7 @@ const { loginValidator } = require("../src/validators")
 const router = express.Router()
 
 router.get("/login", (req, res) => {
-    res.render("login/login", { title: "Вход", formData: {}, websocket: false })
+    return res.render("account/login", { title: "Вход", formData: {}, websocket: false })
 })
 
 router.post("/login", (req, res) => {
@@ -15,7 +15,7 @@ router.post("/login", (req, res) => {
         })
     } else {
         // здесь должна быть авторизация юзера
-        res.json({
+        return res.json({
             success: true,
             redirect: "/feed",
         })

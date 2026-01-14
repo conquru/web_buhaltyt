@@ -21,7 +21,7 @@ password.addEventListener("input", () => {
             value: password.value,
         }),
     )
-}) 
+})
 
 form.addEventListener("submit", (e) => {
     e.preventDefault()

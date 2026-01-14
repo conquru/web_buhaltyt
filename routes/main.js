@@ -57,7 +57,9 @@ const post_example = {
     parent_comments: [parent_comment_example], // список родительских комментариев поста
 }
 
-router.get("/", (req, res) => res.render("index", { title: "Главная", websocket: false }))
+router.get("/", (req, res) => {
+    return res.render("main/index", { title: "Главная", websocket: false })
+})
 
 router.get("/feed", (req, res) => {
     // тут должна быть логика получения постов из бд
@@ -77,9 +79,9 @@ router.get("/feed", (req, res) => {
     })
 
     if (wss.check_ip(req)) {
-        res.render("feed", { title: "Лента", posts: posts, users: users, websocket: true })
+        return res.render("main/feed", { title: "Лента", posts, users, websocket: true })
     } else {
-        res.sendStatus(429)
+        return res.sendStatus(429)
     }
 })
 

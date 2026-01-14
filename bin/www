@@ -14,17 +14,17 @@ const server = http.createServer(app)
 wss.init_wss(server)
 
 server.listen(PORT, HOST, () => {
-  console.log(`Listening on http://localhost:${PORT}`)
+    console.log(`Listening on http://localhost:${PORT}`)
 })
 
 server.on("error", (err) => {
-  if (err.code === "EACCES") {
-    console.error(`Port ${PORT} requires elevated privileges`)
-    process.exit(1)
-  } else if (err.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use`)
-    process.exit(1)
-  } else {
-    throw err
-  }
+    if (err.code === "EACCES") {
+        console.error(`Port ${PORT} requires elevated privileges`)
+        process.exit(1)
+    } else if (err.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use`)
+        process.exit(1)
+    } else {
+        throw err
+    }
 })

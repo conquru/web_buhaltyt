@@ -1,43 +1,42 @@
 .password-wrapper {
+    position: relative;
     width: 100%;
 }
 
-/* input */
 .password-input {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    position: relative;
+    background-color: transparent; /* важно */
+    z-index: 2;
 }
 
-/* progress */
 .password-progress {
-    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    height: 6px;
-    margin: 0;
-    border-top: 0;
-    border-radius: 0 0 999px 999px;
+    height: 1.25rem;
+    clip-path: inset(1rem 0rem 0rem 0rem);
+    border: 1px solid transparent;
+    border-radius: 999px;
     overflow: hidden;
-
     appearance: none;
     -webkit-appearance: none;
-
+    background: transparent;
+    z-index: 1;
     --c1: #ef4444;
     --c2: #f97316;
 }
 
-/* фон */
 .password-progress::-webkit-progress-bar {
-    background: #e5e7eb;
+    background: transparent;
 }
 
-/* заполнение */
 .password-progress::-webkit-progress-value {
     background: linear-gradient(90deg, var(--c1), var(--c2));
     border-radius: 0 0 999px 999px;
     transition: width 0.3s ease;
 }
 
-/* Firefox */
 .password-progress::-moz-progress-bar {
     background: linear-gradient(90deg, var(--c1), var(--c2));
     border-radius: 0 0 999px 999px;

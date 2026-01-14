@@ -10,7 +10,7 @@
             <h5 class="mt-2 ms-3">Новый пост</h5>
         </div>
         <div class="card-body">
-            <form method="POST" enctype="multipart/form-data" id="form">
+            <form method="post" enctype="multipart/form-data" id="form">
                 {#{% csrf_token %}#}
                 <input type="file" name="image" id="image" accept="image/*" hidden multiple>
                 <label for="textarea" class="visually-hidden">Текст поста</label>
@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
 {% endblock %}
 
 {% block js %}

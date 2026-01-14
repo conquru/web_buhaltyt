@@ -18,15 +18,12 @@ function loginValidator(body) {
         if (!validPhone) {
             return "Неверный логин или пароль"
         }
-        
     } else if (nickname.includes("@")) {
-        
         const validEmail = users.some((user) => user.email === nickname && user.password === password)
 
         if (!validEmail) {
             return "Неверный логин или пароль"
         }
-
     } else {
         const validLogin = users.some((user) => user.login === nickname && user.password === password)
 
@@ -48,9 +45,7 @@ function loginValidator(body) {
     //     if ((!phoneVerification(validPhone, body.password)){ // loginVerification(телефон + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
     //         return "Неверный логин или пароль"
     //     }
-        
     // } else if (nickname.includes("@")) {
-        
     //     if ((!emailVerification(validPhone, body.password)){ // loginVerification(почта + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
     //         return "Неверный логин или пароль"
     //     }
@@ -67,7 +62,7 @@ function loginValidator(body) {
 function registerValidator(body) {
     // тестовая вариация
     // проверка заполниности полей
-    if (body.email === "" || body.phone === "" || body.username === "" || body.password == "") {
+    if (body.email === "" || body.phone === "" || body.username === "" || body.password === "") {
         return "Заполните все поля"
     }
 

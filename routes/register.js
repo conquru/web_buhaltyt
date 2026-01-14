@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.get("/register", (req, res) => {
     if (wss.check_ip(req)) {
-        res.render("login/register", { title: "Регистрация", formData: {}, websocket: true })
+        return res.render("account/register", { title: "Регистрация", formData: {}, websocket: true })
     } else {
-        res.sendStatus(429)
+        return res.sendStatus(429)
     }
 })
 
@@ -21,7 +21,7 @@ router.post("/register", (req, res) => {
         })
     } else {
         // здесь должна быть авторизация юзера
-        res.json({
+        return res.json({
             success: true,
             redirect: "/feed",
         })

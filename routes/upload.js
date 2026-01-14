@@ -12,9 +12,13 @@ const upload = multer({
     storage: multer.memoryStorage(),
 })
 
-router.get("/upload", (req, res) => res.render("upload", { title: "Новый пост" }))
+router.get("/upload", (req, res) => {
+    return res.render("main/upload", { title: "Новый пост" })
+})
+
 router.post("/upload", upload.any(), async (req, res) => {
     const saved = []
+
     fs.mkdir(mediaDir, { recursive: true }, (err) => {
         if (err) {
             console.error("Ошибка при создании папки:", err)
@@ -41,10 +45,10 @@ router.post("/upload", upload.any(), async (req, res) => {
 
         saved.push(filename)
     }
-    
+
     // сохранение имен файлов в дб
     console.log(saved)
-    res.redirect("/feed")
+    return res.redirect("/feed")
 })
 
 module.exports = router

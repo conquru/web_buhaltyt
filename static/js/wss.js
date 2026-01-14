@@ -39,9 +39,9 @@ function initWebSocket() {
             const field = document.getElementById("error")
             const progress = document.getElementById("progress")
             const color = {
-                "red": ["#ef4444", "#f97316"],
-                "orange": ["#f97316", "#facc15"],
-                "green": ["#22c55e", "#16a34a"],
+                red: ["#ef4444", "#f97316"],
+                orange: ["#f97316", "#facc15"],
+                green: ["#22c55e", "#16a34a"],
             }
             field.innerHTML = data.err
             field.hidden = !data.err
