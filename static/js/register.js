@@ -2,6 +2,7 @@ const form = document.getElementById("form")
 const error = document.getElementById("error")
 const username = document.getElementById("username")
 const password = document.getElementById("password")
+const progress = document.getElementById("progress")
 
 username.addEventListener("input", () => {
     ws.send(
@@ -21,6 +22,14 @@ password.addEventListener("input", () => {
             value: password.value,
         }),
     )
+})
+
+password.addEventListener("focus", () => {
+    progress.hidden = false
+})
+
+password.addEventListener("blur", () => {
+    progress.hidden = true
 })
 
 form.addEventListener("submit", (e) => {
