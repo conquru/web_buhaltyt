@@ -5,7 +5,7 @@
 
 .password-input {
     position: relative;
-    background-color: transparent; /* важно */
+    background-color: transparent;
     z-index: 2;
 }
 
@@ -15,9 +15,8 @@
     bottom: 0;
     width: 100%;
     height: 1.25rem;
-    clip-path: inset(1rem 0rem 0rem 0rem);
+    clip-path: inset(1rem 0 0 0);
     border: 1px solid transparent;
-    border-radius: 999px;
     overflow: hidden;
     appearance: none;
     -webkit-appearance: none;
@@ -25,6 +24,7 @@
     z-index: 1;
     --c1: #ef4444;
     --c2: #f97316;
+    --c3: 0;
 }
 
 .password-progress::-webkit-progress-bar {
@@ -33,11 +33,19 @@
 
 .password-progress::-webkit-progress-value {
     background: linear-gradient(90deg, var(--c1), var(--c2));
-    border-radius: 0 0 999px 999px;
+    border-radius: 0 0 var(--c3) 999px;
     transition: width 0.3s ease;
 }
 
 .password-progress::-moz-progress-bar {
     background: linear-gradient(90deg, var(--c1), var(--c2));
-    border-radius: 0 0 999px 999px;
+    border-radius: 0 0 var(--c3) 999px;
+}
+
+input.password-input:enabled {
+    background: transparent;
+}
+
+button.eye {
+    z-index: 3;
 }

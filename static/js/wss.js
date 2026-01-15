@@ -39,16 +39,18 @@ function initWebSocket() {
             const field = document.getElementById("error")
             const progress = document.getElementById("progress")
             const color = {
-                red: ["#ef4444", "#f97316"],
-                orange: ["#f97316", "#facc15"],
-                green: ["#22c55e", "#16a34a"],
+                red: ["#ef4444", "#f97316", "0"],
+                orange: ["#f97316", "#facc15", "0"],
+                green: ["#22c55e", "#16a34a", "999px"],
             }
+
             field.innerHTML = data.err
             field.hidden = !data.err
-            progress.hidden = false
+
             progress.setAttribute("value", data.progress)
             progress.style.setProperty("--c1", color[data.color][0])
             progress.style.setProperty("--c2", color[data.color][1])
+            progress.style.setProperty("--c3", color[data.color][2])
         } else {
             console.log(data)
         }
