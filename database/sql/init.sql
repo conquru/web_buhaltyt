@@ -2,18 +2,16 @@ DROP DATABASE IF EXISTS web_buh;
 CREATE DATABASE web_buh;
 USE web_buh;
 
--- кароче надо сделать js код скрипты
-
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL UNIQUE,
     nickname VARCHAR(255) UNIQUE,
+    phone VARCHAR(20),
     avatar_base64 LONGTEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
