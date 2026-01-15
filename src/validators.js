@@ -43,65 +43,64 @@ function loginValidator(body) {
     // const number = conversion(nickname)
 
     // if (number) {
-    //     const validPhone = users.some((user) => user.number === number && user.password === password)
-
-    //     if ((!phoneVerification(validPhone, body.password)){ // loginVerification(телефон + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
-    //         return "Неверный логин или пароль"
-    //     }
+    //     const param = "phone"
         
-    // } else if (nickname.includes("@")) {
-        
-    //     if ((!emailVerification(validPhone, body.password)){ // loginVerification(почта + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
-    //         return "Неверный логин или пароль"
-    //     }
+    // } else if (nickname.includes("@")) {  
+    //     const param = "email"
 
     // } else {
-    //     if ((!loginVerification(validPhone, body.password)){ // loginVerification(логин + пароль) - функция которая откравляет запрос на проверку корректности данных введеных пользователем
-    //         return "Неверный логин или пароль"
-    //     }
+    //     const param = "login"
     // }
-
+    // const valide = loginUser(nickname, password, param)
+    // if (!valide.success) {
+    //     return valide.message
+    // }
     // return null
 }
 
 function registerValidator(body) {
     // тестовая вариация
     // проверка заполниности полей
-    if (body.email === "" || body.phone === "" || body.username === "" || body.password == "") {
+    const email = body.email
+    const login = body.login
+    const phone = conversion(body.phone)
+    const password = body.password
+    const correctPassword = validatePassword(password)
+
+    if (email === "" || phone === "" || login === "" || password == "") {
         return "Заполните все поля"
     }
 
-    const logins = ["pisa", "popa"]
-    const emails = ["pisa@mail.com", "popa@mail.com"]
-    const phones = ["89135235801", "89135235822"]
-    const correctPassword = validatePassword(body.password)
-
     // проверка корректности ввода
-    if (!conversion(body.phone)) {
+    if (!phone) {
         return "Введен некорректный номер телефона"
     }
-    if (!body.email.includes("@")) {
+    if (!email.includes("@")) {
         return "Введена некоректная почта"
     }
     if (correctPassword) {
         return correctPassword
     }
-    // проверка на уникальность данных
-    if (emails.includes(body.email)) {
+
+    // тестовая часть
+    const logins = ["pisa", "popa"]
+    const emails = ["pisa@mail.com", "popa@mail.com"]
+    const phones = ["89135235801", "89135235822"]
+
+    if (emails.includes(email)) {
         return "Пользователь с такой почтой уже зарегистрирован"
     }
 
-    if (phones.includes(body.phone)) {
+    if (phones.includes(phone)) {
         return "Пользователь с таким телефоном уже зарегистрирован"
     }
 
-    if (logins.includes(body.username)) {
+    if (logins.includes(login)) {
         return "Пользователь с таким логином уже зарегистрирован"
     } // если wss пизда
-
+    
     return null
-
-    // как должно быть
+    // тестовая часть
 
     // if (!checkEmail(body.email)){ // checkEmail - функция которая проверяет уникальность почты
     //     return "Пользователь с такой почтой уже зарегистрирован"
@@ -114,6 +113,8 @@ function registerValidator(body) {
     // if (!checkUsername(body.username)){ // checkUsername - функция которая проверяет уникальность логина
     //     return "Пользователь с таким логином уже зарегистрирован"
     // } // если wss пизда
+
+    // registerUser(email, password, login, phone)
 }
 
 module.exports = { loginValidator, registerValidator }
