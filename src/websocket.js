@@ -1,0 +1,75 @@
+const WebSocket = require("ws")
+const ipConnections = new Map()
+const clients = []
+const { levelPassword } = require("../src/check-password")
+
+function init_wss(server) {
+    const wss = new WebSocket.Server({ server })
+
+    wss.on("connection", (ws, req) => {
+        const ip = req.socket.remoteAddress
+        let count_ip = (ipConnections.get(ip) || 0) + 1
+        ipConnections.set(ip, count_ip)
+        clients.push(ws)
+        console.log(
+            `подключился клиент с ip ${ip}, кол-во подключений ${count_ip}, подключений всего: ${clients.length}`,
+        )
+        ws.send(JSON.stringify(`подключение ${count_ip}`))
+
+        ws.lastUserPing = Date.now()
+        ws.state = "visible"
+
+        ws.on("message", (msg) => {
+            const data = JSON.parse(msg)
+            let users = ["pisa", "popa"] // заменить на sql
+
+            if (data.type === "activity") {
+                ws.lastUserPing = Date.now()
+                ws.state = data.state
+            } else if (data.type === "password") {
+                const level = levelPassword(data.value)
+                if (level === "red") {
+                    data.progress = "33"
+                } else if (level === "orange") {
+                    data.progress = "66"
+                } else {
+                    data.progress = "100"
+                }
+                data.color = level
+                ws.send(JSON.stringify(data))
+            } else if (data.type === "unique") {
+                if (data.field === "username") {
+                    data.err = users.includes(data.value)
+                    // data.err = checkUsername(data.value) // работа с бд
+                    ws.send(JSON.stringify(data))
+                }
+            } else {
+                console.log(data.toString())
+            }
+        })
+
+        ws.on("close", () => {
+            const n = clients.indexOf(ws)
+            count_ip = ipConnections.get(ip) - 1
+            clients.splice(n, 1)
+            ipConnections.set(ip, count_ip)
+            console.log(
+                `отключился клиент с ip ${ip}, кол-во подключений ${count_ip}, подключений всего: ${clients.length}`,
+            )
+        })
+    })
+
+    setInterval(() => {
+        wss.clients.forEach((ws) => {
+            if (Date.now() - ws.lastUserPing > 60 * 60 * 1000) return ws.close(4000, "inactive")
+            if (ws.state !== "visible") return ws.close(4000, "inactive")
+        })
+    }, 10 * 1000) // поменять на минуту
+}
+
+function check_ip(req) {
+    const ip = req.socket.remoteAddress
+    return (ipConnections.get(ip) || 0) < 5
+}
+
+module.exports = { init_wss, check_ip }

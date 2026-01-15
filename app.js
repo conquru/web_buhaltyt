@@ -1,26 +1,47 @@
-const express = require("express")
-const WebSocket = require("ws")
 const path = require("path")
-const http = require("http")
-const expressLayouts = require("express-ejs-layouts")
+const express = require("express")
+
+const morgan = require("morgan")
+const cookieParser = require("cookie-parser")
+
+const nunjucks = require("nunjucks")
+
 const main_router = require("./routes/main")
 const login_router = require("./routes/login")
+const upload_router = require("./routes/upload")
+const account_router = require("./routes/account")
+const register_router = require("./routes/register")
 
 const app = express()
-const server = http.createServer(app)
-const wss = new WebSocket.Server({ server })
+const env = nunjucks.configure("views", {
+    autoescape: true,
+    trimBlocks: true,
+    lstripBlocks: true,
+    express: app,
+    watch: true,
+    noCache: true, // only for dev
+})
 
-app.set("view engine", "ejs")
+env.addFilter("merge", (a, b) => {
+    return { ...a, ...b }
+})
+
+app.set("view engine", "njk")
 app.set("views", path.join(__dirname, "views"))
-app.set("layout", "base")
+
+app.use(morgan("dev"))
+app.use(cookieParser())
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(expressLayouts)
+app.use(express.urlencoded({ extended: true }))
+
 app.use(express.static("static"))
 app.use(express.static("media"))
+
 app.use("/", main_router)
 app.use("/", login_router)
+app.use("/", upload_router)
+app.use("/", account_router)
+app.use("/", register_router)
 
-
-app.listen(3000, '0.0.0.0', () => console.log("Listening on port 3000"))
+module.exports = app

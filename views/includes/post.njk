@@ -1,0 +1,55 @@
+<div class="card border-2 border-grey rounded-5 col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8 col-xxl-7 mx-auto">
+    <div class="card-header rounded-top-5">
+        <div class="d-flex align-items-center pt-2 pb-1">
+            <img src="/{{ users[post.user].avatar }}" alt="" class="rounded-circle me-2 post-avatar">
+            <h5 class="flex-grow-1 card-title">{{ users[post.user].name }}</h5>
+        </div>
+    </div>
+    <div class="card-body pb-2">
+        {% if post.images.length %}
+            <div class="image-grid">
+                {% for image in post.images %}
+                    <div class="grid-item">
+                        <img src="/{{ image }}" class="img-fluid card-img" alt="">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <p class="card-text mt-3 text-break mb-1">{{ post.text }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+                <button class="btn btn-like {{ 'liked' if post.isLiked else '' }}">
+                    <i class="bi bi-heart{{ '-fill' if post.isLiked else '' }} like-icon"></i>
+                    <span class="like-count">{{ post.likes.length if post.likes.length > 0 else '' }}</span>
+                </button>
+                <button class="btn btn-like ms-1">
+                    <i class="bi bi-hand-thumbs-down{{ '-fill' if post.isDisliked else '' }} like-icon"></i>
+                    <span class="like-count">{{ post.dislikes.length if post.dislikes.length > 0 else '' }}</span>
+                </button>
+                <button class="btn btn-like ms-1 {{ '' if post.comments.length > 0 else 'disabled' }}">
+                    <i class="bi bi-chat-left{{ '-fill' if post.isCommentsOpened else '' }} like-icon"></i>
+                    <span class="like-count">{{ post.comments.length if post.comments.length > 0 else '' }}</span>
+                </button>
+            </div>
+            <span class="grey">{{ post.time }}</span>
+        </div>
+        {% if post.isCommentsOpened and post.comments.length > 0 %}
+            <hr class="mt-1 mb-2">
+            <div class="overflow-y-auto">
+                {% for comment in post.parent_comments %}
+                    {% include "includes/comments.njk" %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="card-footer rounded-bottom-5">
+        <div class="d-flex align-items-center">
+            <label class="flex-grow-1 me-2">
+                <input class="form-control border-1 rounded-5 pb-2 pt-1 my-2" type="text" placeholder="Комментарий">
+            </label>
+            <button class="btn btn-primary btn-send rounded-circle">
+                <i class="bi bi-send"></i>
+            </button>
+        </div>
+    </div>
+</div>

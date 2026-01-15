@@ -1,0 +1,17 @@
+{% extends "base.njk" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/css/feed.css">
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center mb-2">
+        <a class="btn btn-secondary rounded-5" href="/upload">
+            <i class="bi bi-plus-circle"></i>
+            <span class="me-1">Новый пост</span>
+        </a>
+    </div>
+    {% for post in posts %}
+        {% include "includes/post.njk" %}
+    {% endfor %}
+{% endblock %}

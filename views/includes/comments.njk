@@ -1,0 +1,58 @@
+<div class="d-flex">
+    <img src="/{{ users[comment.user].avatar }}" alt="" class="rounded-circle me-2 post-avatar">
+    <div class="flex-grow-1">
+        <h6 class="mb-0">{{ users[comment.user].name }}</h6>
+        <p class="text-break m-0">{{ comment.text }}</p>
+        <div class="d-flex">
+            <span class="grey flex-grow-1">{{ comment.time }}</span>
+            <div class="flex-shrink-1 d-flex">
+                <button class="btn btn-comment {{ 'liked' if comment.isLiked else '' }}">
+                    <i class="bi bi-heart{{ '-fill' if comment.isLiked else '' }} like-icon"></i>
+                    <span class="like-count">{{ comment.likes.length if comment.likes.length > 0 else '' }}</span>
+                </button>
+                <button class="btn btn-comment ms-1">
+                    <i class="bi bi-hand-thumbs-down{{ '-fill' if comment.isDisliked else '' }} like-icon"></i>
+                    <span class="like-count">{{ comment.dislikes.length if comment.dislikes.length > 0 else '' }}</span>
+                </button>
+                <button class="btn btn-comment ms-1">
+                    <i class="bi bi-reply like-icon"></i>
+                    <span class="like-count">{{ comment.children.length if comment.children.length > 0 else '' }}</span>
+                </button>
+            </div>
+        </div>
+        {% for child in comment.children %}
+            <div class="d-flex">
+                <img src="/{{ users[child.user].avatar }}" alt="" class="rounded-circle me-2 post-avatar">
+                <div>
+                    <h6 class="mb-0">
+                        {{ users[child.user].name }}
+                        <span style="font: 0.9rem 'Times New Roman'">{{ '&#9658;' | safe }}</span>
+                        {{ users[child.parent].name }}
+                    </h6>
+                    <p class="text-break m-0">{{ child.text }}</p>
+                    <div class="d-flex">
+                        <span class="grey flex-grow-1">{{ child.time }}</span>
+                        <div class="flex-shrink-1 d-flex">
+                            <button class="btn btn-comment {{ 'liked' if child.isLiked else '' }}">
+                                <i class="bi bi-heart{{ '-fill' if child.isLiked else '' }} like-icon"></i>
+                                <span class="like-count">
+                                    {{ child.likes.length if child.likes.length > 0 else '' }}
+                                </span>
+                            </button>
+                            <button class="btn btn-comment ms-1">
+                                <i class="bi bi-hand-thumbs-down{{ '-fill' if child.isDisliked else '' }} like-icon">
+                                </i>
+                                <span class="like-count">
+                                    {{ child.dislikes.length if child.dislikes.length > 0 else '' }}
+                                </span>
+                            </button>
+                            <button class="btn btn-comment ms-1">
+                                <i class="bi bi-reply like-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

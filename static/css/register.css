@@ -1,0 +1,43 @@
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input {
+    position: relative;
+    background-color: transparent; /* важно */
+    z-index: 2;
+}
+
+.password-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.25rem;
+    clip-path: inset(1rem 0rem 0rem 0rem);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    z-index: 1;
+    --c1: #ef4444;
+    --c2: #f97316;
+}
+
+.password-progress::-webkit-progress-bar {
+    background: transparent;
+}
+
+.password-progress::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    border-radius: 0 0 999px 999px;
+    transition: width 0.3s ease;
+}
+
+.password-progress::-moz-progress-bar {
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    border-radius: 0 0 999px 999px;
+}
