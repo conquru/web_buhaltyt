@@ -1,0 +1,97 @@
+{% extends "base.njk" %}
+
+{% block css %}
+    <link rel="stylesheet" href="css/account.css">
+{% endblock %}
+
+{% block content %}
+    {% set formData = formData | merge(user) %}
+    <div class="d-flex">
+        <div class="flex-shrink-0">
+            <img class="rounded-circle avatar mb-2" src="/{{ user.avatar }}" alt="Аватар">
+            <div id="personal">
+                <h3 class="mb-3" data-field="name">{{ formData.name }}</h3>
+                <p class="grey">
+                    <i class="bi bi-person me-1"></i>
+                    <span data-field="username">{{ user.username }}</span>
+                </p>
+                <p class="grey">
+                    <i class="bi bi-envelope me-1"></i>
+                    <span data-field="email">{{ user.email }}</span>
+                </p>
+                <p class="grey">
+                    <i class="bi bi-telephone me-1"></i>
+                    <span data-field="phone">{{ user.phone }}</span>
+                </p>
+                <button class="btn btn-secondary rounded-pill" id="edit-btn">
+                    <i class="bi bi-pencil me-1"></i>
+                    <span>Редактировать</span>
+                </button>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="avatar-form" novalidate hidden>
+                <input type="file" name="avatar" id="avatar-input" accept="image/*" hidden>
+                <button id="change-btn" class="btn btn-secondary rounded-pill">Сменить аватар</button>
+                <button id="delete-btn" class="btn btn-danger rounded-pill">Удалить аватар</button>
+            </form>
+            <form method="post" id="account-form" class="mt-2" novalidate hidden>
+                <label for="name">Имя</label>
+                <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Имя"
+                        value="{{ formData.name }}"
+                        required
+                >
+                <label for="username">Имя пользователя</label>
+                <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Имя пользователя"
+                        value="{{ formData.username }}"
+                        required
+                >
+                <label for="email">email</label>
+                <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="email"
+                        value="{{ formData.email }}"
+                        required
+                        disabled
+                >
+                <label for="phone">Номер телефона</label>
+                <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Номер телефона"
+                        value="{{ formData.phone }}"
+                        required
+                        disabled
+                >
+                <button class="btn btn-primary rounded-pill mt-2" id="submit-btn">
+                    <i class="bi bi-check-lg"></i>
+                    <span>Сохранить</span>
+                </button>
+            </form>
+            <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
+        </div>
+        <div class="flex-grow-1 ms-5">
+            <a class="d-inline-block btn btn-danger rounded-pill float-end" href="/logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="js/account.js"></script>
+{% endblock %}
