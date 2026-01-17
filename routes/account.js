@@ -1,4 +1,6 @@
 const express = require("express")
+const { accountValidator } = require("../src/validators")
+const wss = require("../src/websocket");
 const router = express.Router()
 const user = {
     name: "Ириночка",
@@ -9,7 +11,11 @@ const user = {
 }
 
 router.get("/account", (req, res) => {
-    return res.render("account/account", { title: "Вход", formData: {}, websocket: false, user, posts: {} })
+    if (wss.check_ip(req)) {
+        return res.render("account/account", { title: "Вход", formData: {}, websocket: true, user, posts: {} })
+    } else {
+        return res.sendStatus(429)
+    }
 })
 
 router.post("/account", (req, res) => {
@@ -17,8 +23,19 @@ router.post("/account", (req, res) => {
 })
 
 router.post("/account/update", (req, res) => {
-    console.log(req.body)
-    return res.json(JSON.stringify(req.data))
+    const error = accountValidator(req.body)
+    if (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error
+        })
+    } else {
+        return res.json({
+            success: true,
+            redirect: "/account",
+        })
+    }
 })
 
 router.get("/account/avatar", (req, res) => {
