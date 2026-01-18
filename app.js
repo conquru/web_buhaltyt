@@ -9,7 +9,7 @@ const nunjucks = require("nunjucks")
 const main_router = require("./routes/main")
 const login_router = require("./routes/login")
 const upload_router = require("./routes/upload")
-const account_router = require("./routes/account")
+// const account_router = require("./routes/account")
 const register_router = require("./routes/register")
 
 const app = express()
@@ -41,7 +41,7 @@ app.use(express.static("media"))
 app.use("/", main_router)
 app.use("/", login_router)
 app.use("/", upload_router)
-app.use("/", account_router)
+// app.use("/", account_router)
 app.use("/", register_router)
 
 module.exports = app
