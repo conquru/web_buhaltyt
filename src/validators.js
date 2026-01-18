@@ -123,4 +123,46 @@ function registerValidator(body) {
     // return null
 }
 
-module.exports = { loginValidator, registerValidator }
+function accountValidator(body) {
+    const name = body.name
+    const username = body.username
+
+    if (username === "" || name === "") {
+        return "Заполните все поля"
+    }
+
+    // тест
+    const currentUser = {
+        name: "Ириночка",
+        nickname: "kabanyok"
+    }
+
+    const usernames = ["pisa", "popa"]
+
+    if (!/^[a-zA-Z0-9_.]+$/.test(name) && !(currentUser.name === name)){
+        return "Имя пользователя содержит некорректные символы"
+    }
+    if (!/^[a-zA-Z0-9_.]+$/.test(username) && !(currentUser.username === username)){
+        return "Имя пользователя содержит некорректные символы"
+    }
+
+    if (usernames.includes(username)) {
+        return "Пользователь с таким именем уже зарегистрирован"
+    } // если wss пизда
+
+    return null
+    // тест
+
+    //  как должно быть
+    // сделать current user и проверку на то какое поле изменилось после паспорта!!!
+    // if (!(currentUser.name === name) && !/^[a-zA-Z0-9_.]+$/.test(name)) {
+    //      changeName(name) функция должна менять имя пользователя возможно добавление еще одного параметра(id)
+    // }
+    // if (!(currentUser.username === username) && !/^[a-zA-Z0-9_.]+$/.test(username)) {
+    //      if (!checkUsername(username)) {
+    //             return "Пользователь с таким логином уже зарегистрирован"
+    // changeUsername(username) функция должна менять имя пользователя возможно добавление еще одного параметра(id)
+    // }
+}
+
+module.exports = { loginValidator, registerValidator, accountValidator }

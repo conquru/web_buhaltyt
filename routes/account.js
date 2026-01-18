@@ -1,5 +1,7 @@
 const express = require("express")
+const wss = require("../src/websocket")
 const getDiff = require("../src/get-diff-date")
+const { accountValidator } = require("../src/validators")
 const formatUserCounters = require("../src/format-user-counters")
 
 const router = express.Router()
@@ -27,9 +29,13 @@ const post_example = {
 }
 
 router.get("/account", (req, res) => {
-    formatUserCounters(user)
-    return res.render("account/account", { title: "Вход", formData: {}, websocket: false, user,
-        posts: [post_example], users: { 1: user } })
+    if (wss.check_ip(req)) {
+        formatUserCounters(user)
+        return res.render("account/account", { title: "Вход", formData: {}, websocket: false, user,
+            posts: [post_example], users: { 1: user } })
+    } else {
+        return res.sendStatus(429)
+    }
 })
 
 router.post("/account", (req, res) => {
@@ -37,8 +43,19 @@ router.post("/account", (req, res) => {
 })
 
 router.post("/account/update", (req, res) => {
-    console.log(req.body)
-    return res.json(JSON.stringify(req.data))
+    const error = accountValidator(req.body)
+    if (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error
+        })
+    } else {
+        return res.json({
+            success: true,
+            redirect: "/account",
+        })
+    }
 })
 
 router.get("/account/avatar", (req, res) => {
