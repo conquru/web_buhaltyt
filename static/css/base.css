@@ -43,3 +43,7 @@ nav:hover {
 input.form-control {
     height: 2.5rem;
 }
+
+main {
+    margin-top: 2rem;
+}

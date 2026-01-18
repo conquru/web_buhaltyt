@@ -73,3 +73,73 @@ progress.statistics {
 label {
     margin-left: 0.8rem;
 }
+
+.bi-sm {
+    height: 1.8rem;
+    width: 1.8rem;
+    font-size: 0.8em;
+    padding: 0;
+}
+
+.buttons {
+    position: fixed;
+    right: 2.5%;
+    bottom: 5%;
+    z-index: 1000;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+
+    opacity: 0;
+    transform: translateY(20px) scale(0.7);
+    pointer-events: none;
+
+    transition:
+            opacity 0.25s ease,
+            transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.action-btn.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.hint {
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+
+    max-width: 0;
+    opacity: 0;
+    transform: translateX(-5px);
+
+    transition:
+            max-width 0.6s ease,
+            opacity 0.4s ease,
+            transform 0.6s ease;
+}
+
+.action-btn.show .hint {
+    max-width: 200px;
+    opacity: 1;
+    transform: translateX(0);
+    margin-left: 0.5rem;
+
+    transition:
+            max-width 0.6s ease,
+            opacity 0.2s ease,
+            transform 0.6s ease;
+}
+
+.action-btn .bi {
+    transition: transform 0.8s ease;
+}
+
+.action-btn.show .bi {
+    transform: rotate(360deg);
+}

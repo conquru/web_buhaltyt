@@ -2,31 +2,37 @@
 
 {% block css %}
     <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet" href="/css/feed.css">
 {% endblock %}
 
 {% block content %}
     {% set formData = formData | merge(user) %}
     <div class="d-flex">
         <div class="flex-shrink-0">
-            <img class="rounded-circle avatar mb-2" src="/{{ user.avatar }}" alt="Аватар">
+            <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар">
             <div id="personal">
-                <h3 class="mb-3" data-field="name">{{ formData.name }}</h3>
+                <div class="d-flex justify-content-start align-items-center mb-3">
+                    <h3 class="me-2" data-field="name">{{ formData.name }}</h3>
+                    <button class="btn btn-primary rounded-circle bi-sm" id="edit-btn">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
                 <p class="grey">
                     <i class="bi bi-person me-1"></i>
-                    <span data-field="username">{{ user.username }}</span>
+                    <span data-field="formDataname">{{ formData.username }}</span>
                 </p>
                 <p class="grey">
                     <i class="bi bi-envelope me-1"></i>
-                    <span data-field="email">{{ user.email }}</span>
+                    <span data-field="email">{{ formData.email }}</span>
                 </p>
                 <p class="grey">
                     <i class="bi bi-telephone me-1"></i>
-                    <span data-field="phone">{{ user.phone }}</span>
+                    <span data-field="phone">{{ formData.phone }}</span>
                 </p>
-                <button class="btn btn-secondary rounded-pill" id="edit-btn">
-                    <i class="bi bi-pencil me-1"></i>
-                    <span>Редактировать</span>
-                </button>
+                <p class="grey mt-3">
+                    <i class="bi bi-people me-1"></i>
+                    <span>{{ formData.subscribersText }} · {{ formData.subscriptionsText }}</span>
+                </p>
             </div>
             <form method="post" enctype="multipart/form-data" id="avatar-form" novalidate hidden>
                 <input type="file" name="avatar" id="avatar-input" accept="image/*" hidden>
@@ -83,10 +89,25 @@
             </form>
             <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
         </div>
-        <div class="flex-grow-1 ms-5">
-            <a class="d-inline-block btn btn-danger rounded-pill float-end" href="/logout">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Выйти</span>
+        <div class="flex-grow-0">
+            <div class="d-flex justify-content-center mb-3">
+                <a class="btn btn-secondary rounded-5" href="/upload" id="new-btn">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="me-1">Новый пост</span>
+                </a>
+            </div>
+            {% for post in posts %}
+                {% include "includes/post.njk" %}
+            {% endfor %}
+        </div>
+        <div class="buttons">
+            <button class="btn btn-secondary rounded-5 action-btn" id="up-btn">
+                <i class="bi bi-arrow-up-circle fs-4"></i>
+                <span class="hint" id="up-hint">Наверх</span>
+            </button>
+            <a class="btn btn-secondary rounded-5 me-2 action-btn" id="upload-btn" href="/upload">
+                <i class="bi bi-plus-circle fs-4"></i>
+                <span class="hint" id="upload-hint">Новый пост</span>
             </a>
         </div>
     </div>
