@@ -9,7 +9,7 @@
     {% set formData = formData | merge(user) %}
     <div class="d-flex">
         <div class="flex-shrink-0">
-            <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар">
+            <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар" id="avatar">
             <div id="personal">
                 <div class="d-flex justify-content-start align-items-center mb-3">
                     <h3 class="me-2" data-field="name">{{ formData.name }}</h3>
@@ -19,7 +19,7 @@
                 </div>
                 <p class="grey">
                     <i class="bi bi-person me-1"></i>
-                    <span data-field="formDataname">{{ formData.username }}</span>
+                    <span data-field="username">{{ formData.username }}</span>
                 </p>
                 <p class="grey">
                     <i class="bi bi-envelope me-1"></i>
@@ -82,7 +82,7 @@
                         required
                         disabled
                 >
-                <button class="btn btn-primary rounded-pill mt-2" id="submit-btn">
+                <button class="btn btn-primary rounded-pill mt-2" id="submit-btn" type="submit">
                     <i class="bi bi-check-lg"></i>
                     <span>Сохранить</span>
                 </button>

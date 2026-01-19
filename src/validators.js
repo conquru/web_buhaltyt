@@ -139,15 +139,20 @@ function accountValidator(body) {
 
     const usernames = ["pisa", "popa"]
 
-    if (!/^[a-zA-Z0-9_.]+$/.test(name) && !(currentUser.name === name)){
-        return "Имя пользователя содержит некорректные символы"
+    if (currentUser.name === name && currentUser.username === username) {
+        return null
     }
-    if (!/^[a-zA-Z0-9_.]+$/.test(username) && !(currentUser.username === username)){
+
+    if (!/^[a-zA-ZА-Яа-яЁё0-9_.]+$/.test(name)) {
+        return "Имя содержит некорректные символы"
+    }
+
+    if (!/^[a-zA-Z0-9_.]+$/.test(username)) {
         return "Имя пользователя содержит некорректные символы"
     }
 
     if (usernames.includes(username)) {
-        return "Пользователь с таким именем уже зарегистрирован"
+        return "Пользователь с таким логином уже зарегистрирован"
     } // если wss пизда
 
     return null

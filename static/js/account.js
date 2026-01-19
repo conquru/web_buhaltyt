@@ -4,13 +4,13 @@ const avatarForm = document.getElementById("avatar-form")
 const uploadBtn = document.getElementById("upload-btn")
 const changeBtn = document.getElementById("change-btn")
 const deleteBtn = document.getElementById("delete-btn")
-const submitBtn = document.getElementById("submit-btn")
+const username = document.getElementById("username")
 const personal = document.getElementById("personal")
 const editBtn = document.getElementById("edit-btn")
 const newBtn = document.getElementById("new-btn")
+const avatar = document.getElementById("avatar")
 const upBtn = document.getElementById("up-btn")
 const error = document.getElementById("error")
-const username = document.getElementById("username")
 
 function setupHint(btn) {
     btn.addEventListener("mouseenter", () => {
@@ -64,24 +64,46 @@ username.addEventListener("input", () => {
 accountForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
-    const data = Object.fromEntries(new FormData(accountForm))
+    if (!accountForm.checkValidity()) {
+        error.innerHTML = "Заполните все поля"
+        error.hidden = false
+        return
+    }
+
+    const formData = Object.fromEntries(new FormData(accountForm))
+    const same = Object.entries(formData).every(([key, value]) =>
+        value === personal.querySelector(`[data-field="${key}"]`).textContent
+    )
+
+    if (same) {
+        accountForm.hidden = true
+        avatarForm.hidden = true
+        personal.hidden = false
+        return
+    }
+
     fetch("/account/update", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
-    }).then((res) => res.json())
+        body: JSON.stringify(formData),
+    })
+        .then((res) => res.json())
         .then((data) => {
-            if (data.success && data.redirect) {
-                personal.hidden = false
+            if (data.success) {
+                Object.entries(formData).forEach(([field, value]) => {
+                    const element = personal.querySelector(`[data-field="${field}"]`)
+                    if (element) element.textContent = value
+                })
+
                 accountForm.hidden = true
                 avatarForm.hidden = true
-                window.location.href = data.redirect
-                return
+                personal.hidden = false
+            } else {
+                error.innerHTML = data.message
+                error.hidden = false
             }
-            error.innerHTML = data.message
-            error.hidden = false
         })
 })
 
@@ -91,13 +113,39 @@ changeBtn.addEventListener("click", (e) => {
 })
 
 avatarInput.addEventListener("change", () => {
-    avatarForm.submit()
+    error.textContent = ""
+    error.hidden = true
+    const file = avatarInput.files[0]
+
+    if (!file.type.startsWith("image/")) {
+        error.textContent = "Файл не является изображением"
+        error.hidden = false
+        return
+    }
+
+    if (file.size > 500 * 1024) {
+        error.textContent = "Файл слишком большой"
+        error.hidden = false
+        return
+    }
+
+    avatarForm.requestSubmit()
 })
 
 avatarForm.addEventListener("submit", (e) => {
     e.preventDefault()
+
+    const file = avatarInput.files[0]
+    const reader = new FileReader()
+    reader.onload = () => {
+        avatar.src = reader.result
+    }
+    reader.readAsDataURL(file)
+    // добавить fetch на account/avatar с самой аватаркой
 })
 
 deleteBtn.addEventListener("click", (e) => {
     e.preventDefault()
+    avatar.src = "/img/avatar.png"
+    // добавить fetch на account/avatar с body: "delete"
 })
