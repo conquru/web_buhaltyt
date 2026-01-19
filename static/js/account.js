@@ -12,6 +12,8 @@ const avatar = document.getElementById("avatar")
 const upBtn = document.getElementById("up-btn")
 const error = document.getElementById("error")
 
+let avatarFlag = false
+
 function setupHint(btn) {
     btn.addEventListener("mouseenter", () => {
         btn.classList.add("show")
@@ -61,7 +63,7 @@ username.addEventListener("input", () => {
     )
 })
 
-accountForm.addEventListener("submit", (e) => {
+accountForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
     if (!accountForm.checkValidity()) {
@@ -75,14 +77,14 @@ accountForm.addEventListener("submit", (e) => {
         value === personal.querySelector(`[data-field="${key}"]`).textContent
     )
 
-    if (same) {
+    if (same && !avatarFlag) {
         accountForm.hidden = true
         avatarForm.hidden = true
         personal.hidden = false
         return
     }
 
-    fetch("/account/update", {
+    await fetch("/account/update", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -105,6 +107,19 @@ accountForm.addEventListener("submit", (e) => {
                 error.hidden = false
             }
         })
+
+    if (avatarFlag) { // флаг для отправки аватара в бд
+        const file = avatarInput.files[0]
+        const buffer = await file.arrayBuffer()
+
+        await fetch("/account/avatar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/octet-stream" // бинарные данные
+            },
+            body: buffer
+        })
+    }
 })
 
 changeBtn.addEventListener("click", (e) => {
@@ -140,12 +155,13 @@ avatarForm.addEventListener("submit", (e) => {
     reader.onload = () => {
         avatar.src = reader.result
     }
+
     reader.readAsDataURL(file)
-    // добавить fetch на account/avatar с самой аватаркой
+    avatarFlag = true
 })
 
 deleteBtn.addEventListener("click", (e) => {
     e.preventDefault()
     avatar.src = "/img/avatar.png"
-    // добавить fetch на account/avatar с body: "delete"
+    avatarFlag = true
 })

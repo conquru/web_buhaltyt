@@ -62,7 +62,11 @@ router.get("/account/avatar", (req, res) => {
 })
 
 router.post("/account/avatar", (req, res) => {
-    console.log(req.body)
+    const buffer = req.body // это Buffer
+    const base64 = Buffer.from(buffer).toString("base64") // конвертируем в Base64
+
+    // Можно сохранить в файл или БД
+    // fs.writeFileSync("avatar.txt", base64)
 })
 
 router.get("/logout", (req, res) => {
