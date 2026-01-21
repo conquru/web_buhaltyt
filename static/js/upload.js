@@ -22,6 +22,13 @@ imageBtn.addEventListener("click", (e) => {
 
 submitBtn.addEventListener("click", (e) => {
     e.preventDefault()
+
+    if (!textarea.checkValidity()) {
+        error.innerHTML = "Текст поста не может быть пустым"
+        error.hidden = false
+        return
+    }
+
     form.submit()
 })
 

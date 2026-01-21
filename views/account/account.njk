@@ -1,0 +1,118 @@
+{% extends "base.njk" %}
+
+{% block css %}
+    <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet" href="/css/feed.css">
+{% endblock %}
+
+{% block content %}
+    {% set formData = formData | merge(user) %}
+    <div class="d-flex">
+        <div class="flex-shrink-0">
+            <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар" id="avatar">
+            <div id="personal">
+                <div class="d-flex justify-content-start align-items-center mb-3">
+                    <h3 class="me-2" data-field="name">{{ formData.name }}</h3>
+                    <button class="btn btn-primary rounded-circle bi-sm" id="edit-btn">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
+                <p class="grey">
+                    <i class="bi bi-person me-1"></i>
+                    <span data-field="username">{{ formData.username }}</span>
+                </p>
+                <p class="grey">
+                    <i class="bi bi-envelope me-1"></i>
+                    <span data-field="email">{{ formData.email }}</span>
+                </p>
+                <p class="grey">
+                    <i class="bi bi-telephone me-1"></i>
+                    <span data-field="phone">{{ formData.phone }}</span>
+                </p>
+                <p class="grey mt-3">
+                    <i class="bi bi-people me-1"></i>
+                    <span>{{ formData.subscribersText }} · {{ formData.subscriptionsText }}</span>
+                </p>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="avatar-form" novalidate hidden>
+                <input type="file" name="avatar" id="avatar-input" accept="image/*" hidden>
+                <button id="change-btn" class="btn btn-secondary rounded-pill">Сменить аватар</button>
+                <button id="delete-btn" class="btn btn-danger rounded-pill">Удалить аватар</button>
+            </form>
+            <form method="post" id="account-form" class="mt-2" novalidate hidden>
+                <label for="name">Имя</label>
+                <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Имя"
+                        value="{{ formData.name }}"
+                        required
+                >
+                <label for="username">Имя пользователя</label>
+                <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Имя пользователя"
+                        value="{{ formData.username }}"
+                        required
+                >
+                <label for="email">email</label>
+                <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="email"
+                        value="{{ formData.email }}"
+                        required
+                        disabled
+                >
+                <label for="phone">Номер телефона</label>
+                <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        class="form-control rounded-pill mb-2"
+                        placeholder="Номер телефона"
+                        value="{{ formData.phone }}"
+                        required
+                        disabled
+                >
+                <button class="btn btn-primary rounded-pill mt-2" id="submit-btn" type="submit">
+                    <i class="bi bi-check-lg"></i>
+                    <span>Сохранить</span>
+                </button>
+            </form>
+            <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
+        </div>
+        <div class="flex-grow-0">
+            <div class="d-flex justify-content-center mb-3">
+                <a class="btn btn-secondary rounded-5" href="/upload" id="new-btn">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="me-1">Новый пост</span>
+                </a>
+            </div>
+            {% for post in posts %}
+                {% include "includes/post.njk" %}
+            {% endfor %}
+        </div>
+        <div class="buttons">
+            <button class="btn btn-secondary rounded-5 action-btn" id="up-btn">
+                <i class="bi bi-arrow-up-circle fs-4"></i>
+                <span class="hint" id="up-hint">Наверх</span>
+            </button>
+            <a class="btn btn-secondary rounded-5 me-2 action-btn" id="upload-btn" href="/upload">
+                <i class="bi bi-plus-circle fs-4"></i>
+                <span class="hint" id="upload-hint">Новый пост</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="js/account.js"></script>
+{% endblock %}

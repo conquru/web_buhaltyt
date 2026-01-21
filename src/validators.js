@@ -8,9 +8,9 @@ function loginValidator(body) {
         { login: "popa", email: "popa@mail.com", number: "81111111111", password: "qwerty" },
     ]
 
-    const nickname = body.login
+    const login = body.login
     const password = body.password
-    const number = conversion(nickname)
+    const number = conversion(login)
 
     if (number) {
         const validPhone = users.some((user) => user.number === number && user.password === password)
@@ -18,17 +18,17 @@ function loginValidator(body) {
         if (!validPhone) {
             return "Неверный логин или пароль"
         }
-        
-    } else if (nickname.includes("@")) {
-        
-        const validEmail = users.some((user) => user.email === nickname && user.password === password)
+
+    } else if (login.includes("@")) {
+
+        const validEmail = users.some((user) => user.email === login && user.password === password)
 
         if (!validEmail) {
             return "Неверный логин или пароль"
         }
 
     } else {
-        const validLogin = users.some((user) => user.login === nickname && user.password === password)
+        const validLogin = users.some((user) => user.login === login && user.password === password)
 
         if (!validLogin) {
             return "Неверный логин или пароль"
@@ -38,20 +38,21 @@ function loginValidator(body) {
     return null
 
     // как должно быть
-    // const nickname = body.login
+    // const param
+    // const login = body.login
     // const password = body.password
-    // const number = conversion(nickname)
+    // const number = conversion(login)
 
     // if (number) {
-    //     const param = "phone"
-
-    // } else if (nickname.includes("@")) {
-    //     const param = "email"
-
+    //     param = "phone"
+    // } else if (login.includes("@")) {
+    //     param = "email"
     // } else {
-    //     const param = "login"
+    //     param = "login"
     // }
-    // const valide = loginUser(nickname, password, param)
+
+    // const valide = loginUser(login, password, param)
+
     // if (!valide.success) {
     //     return valide.message
     // }
@@ -63,31 +64,33 @@ function registerValidator(body) {
     // тестовая вариация
     // проверка заполниности полей
     const email = body.email
-    const login = body.login
-    const phone = conversion(body.phone)
+    const username = body.username
     const password = body.password
+    const phone = conversion(body.phone)
     const correctPassword = validatePassword(password)
 
-    if (email === "" || phone === "" || login === "" || password === "") {
+    if (email === "" || phone === "" || username === "" || password === "") {
         return "Заполните все поля"
     }
 
-    // проверка корректности ввода
-    if (!phone) {
-        return "Введен некорректный номер телефона"
-    }
-    if (!email.includes("@")) {
-        return "Введена некоректная почта"
-    }
-    if (correctPassword) {
-        return correctPassword
-    }
-
-    // тестовая часть
     const logins = ["pisa", "popa"]
     const emails = ["pisa@mail.com", "popa@mail.com"]
     const phones = ["89135235801", "89135235822"]
 
+    // проверка корректности ввода
+    if (!email.includes("@")) {
+        return "Введена некорректная почта"
+    }
+    if (!/^[a-zA-Z0-9_.]+$/.test(username)) {
+        return "Логин содержит некорректные символы"
+    }
+    if (!phone) {
+        return "Введен некорректный номер телефона"
+    }
+    if (correctPassword) {
+        return correctPassword
+    }
+    // проверка на уникальность данных
     if (emails.includes(email)) {
         return "Пользователь с такой почтой уже зарегистрирован"
     }
@@ -96,26 +99,75 @@ function registerValidator(body) {
         return "Пользователь с таким телефоном уже зарегистрирован"
     }
 
-    if (logins.includes(login)) {
+    if (logins.includes(username)) {
         return "Пользователь с таким логином уже зарегистрирован"
     } // если wss пизда
 
     return null
-    // тестовая часть
 
-    // if (!checkEmail(body.email)){ // checkEmail - функция которая проверяет уникальность почты
+    // как должно быть
+
+    // if (!checkEmail(email)) { // checkEmail - функция которая проверяет уникальность почты
     //     return "Пользователь с такой почтой уже зарегистрирован"
     // }
 
-    // if (!checkPhone(body.phone)){ // checkPhone - функция которая проверяет уникальность телефона
+    // if (!checkPhone(phone)) { // checkPhone - функция которая проверяет уникальность телефона
     //     return "Пользователь с таким телефоном уже зарегистрирован"
     // }
 
-    // if (!checkUsername(body.username)){ // checkUsername - функция которая проверяет уникальность логина
+    // if (!checkUsername(username)) { // checkUsername - функция которая проверяет уникальность логина
     //     return "Пользователь с таким логином уже зарегистрирован"
     // } // если wss пизда
 
-    // registerUser(email, password, login, phone)
+    // registerUser(email, password, username, phone)
+    // return null
 }
 
-module.exports = { loginValidator, registerValidator }
+function accountValidator(body) {
+    const name = body.name
+    const username = body.username
+
+    if (username === "" || name === "") {
+        return "Заполните все поля"
+    }
+
+    // тест
+    const currentUser = {
+        name: "Ириночка",
+        nickname: "kabanyok"
+    }
+
+    const usernames = ["pisa", "popa"]
+
+    if (currentUser.name === name && currentUser.username === username) {
+        return null
+    }
+
+    if (!/^[a-zA-ZА-Яа-яЁё0-9_.]+$/.test(name)) {
+        return "Имя содержит некорректные символы"
+    }
+
+    if (!/^[a-zA-Z0-9_.]+$/.test(username)) {
+        return "Имя пользователя содержит некорректные символы"
+    }
+
+    if (usernames.includes(username)) {
+        return "Пользователь с таким логином уже зарегистрирован"
+    } // если wss пизда
+
+    return null
+    // тест
+
+    //  как должно быть
+    // сделать current user и проверку на то какое поле изменилось после паспорта!!!
+    // if (!(currentUser.name === name) && !/^[a-zA-Z0-9_.]+$/.test(name)) {
+    //      changeName(name) функция должна менять имя пользователя возможно добавление еще одного параметра(id)
+    // }
+    // if (!(currentUser.username === username) && !/^[a-zA-Z0-9_.]+$/.test(username)) {
+    //      if (!checkUsername(username)) {
+    //             return "Пользователь с таким логином уже зарегистрирован"
+    // changeUsername(username) функция должна менять имя пользователя возможно добавление еще одного параметра(id)
+    // }
+}
+
+module.exports = { loginValidator, registerValidator, accountValidator }

@@ -22,8 +22,7 @@ function levelPassword(password) {
         !/[a-z]/.test(password) ||
         !/[A-Z]/.test(password) ||
         !/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(password)
-    )
-        return "orange"
+    ) return "orange"
 
     return "green"
 }

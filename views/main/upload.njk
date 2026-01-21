@@ -15,7 +15,7 @@
                 <input type="file" name="image" id="image" accept="image/*" hidden multiple>
                 <label for="textarea" class="visually-hidden">Текст поста</label>
                 <textarea class="form-control border-0 mb-2 rounded-4" placeholder="Напишите что-нибудь..."
-                          id="textarea" maxlength="2000" name="text"></textarea>
+                          id="textarea" maxlength="2000" name="text" required></textarea>
             </form>
             <div class="overflow-x-auto d-flex flex-nowrap gap-2" id="preview-img"></div>
             <div class="d-flex align-items-center mt-3">
@@ -28,7 +28,8 @@
             </div>
         </div>
     </div>
-    <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
+    <div class="alert alert-danger rounded-5 col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8 col-xxl-7 mx-auto
+                align-content-center text-center mt-2" id="error" role="alert" hidden></div>
 {% endblock %}
 
 {% block js %}
