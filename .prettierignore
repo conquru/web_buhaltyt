@@ -3,6 +3,7 @@
 db/
 media/
 .history/
+database/sql
 node_modules/
 static/css/
 static/ico/
