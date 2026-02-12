@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data" id="form">
-                {#{% csrf_token %}#}
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="file" name="image" id="image" accept="image/*" hidden multiple>
                 <label for="textarea" class="visually-hidden">Текст поста</label>
                 <textarea class="form-control border-0 mb-2 rounded-4" placeholder="Напишите что-нибудь..."

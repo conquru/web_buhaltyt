@@ -15,7 +15,9 @@ form.addEventListener("submit", (e) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "x-csrf-token": getCsrfToken(),
         },
+        credentials: "same-origin",
         body: JSON.stringify(data),
     })
         .then((res) => res.json())

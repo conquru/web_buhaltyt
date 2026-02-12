@@ -8,7 +8,7 @@
 {% block content %}
     {% set formData = formData | merge(user) %}
     <div class="d-flex">
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-1">
             <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар" id="avatar">
             <div id="personal">
                 <div class="d-flex justify-content-start align-items-center mb-3">
@@ -89,7 +89,7 @@
             </form>
             <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
         </div>
-        <div class="flex-grow-0">
+        <div class="flex-grow-1">
             <div class="d-flex justify-content-center mb-3">
                 <a class="btn btn-secondary rounded-5" href="/upload" id="new-btn">
                     <i class="bi bi-plus-circle"></i>

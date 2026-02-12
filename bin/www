@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
+require("dotenv").config()
+
 const http = require("http")
 const app = require("../app")
 const wss = require("../src/websocket")
 
 const PORT = process.env.PORT || 3000
-const HOST = "0.0.0.0"
+const HOST = process.env.HOST || "0.0.0.0"
 
 // создаём HTTP сервер
 const server = http.createServer(app)

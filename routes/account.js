@@ -31,7 +31,7 @@ const post_example = {
 router.get("/account", (req, res) => {
     if (wss.check_ip(req)) {
         formatUserCounters(user)
-        return res.render("account/account", { title: "Вход", formData: {}, websocket: true, user,
+        return res.render("account/account", { title: "Аккаунт", formData: {}, websocket: true, user,
             posts: [post_example], users: { 1: user } })
     } else {
         return res.sendStatus(429)

@@ -12,3 +12,10 @@ function togglePassword() {
         eyeIcon.style.color = ""
     }
 }
+
+function getCsrfToken() {
+    return document.cookie
+        .split("; ")
+        .find(c => c.startsWith("__Host-csrf="))
+        ?.split("=")[1]
+}

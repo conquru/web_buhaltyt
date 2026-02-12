@@ -88,7 +88,9 @@ accountForm.addEventListener("submit", async (e) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "x-csrf-token": getCsrfToken(),
         },
+        credentials: "same-origin",
         body: JSON.stringify(formData),
     })
         .then((res) => res.json())
@@ -115,8 +117,10 @@ accountForm.addEventListener("submit", async (e) => {
         await fetch("/account/avatar", {
             method: "POST",
             headers: {
-                "Content-Type": "application/octet-stream" // бинарные данные
+                "Content-Type": "application/octet-stream", // бинарные данные
+                "x-csrf-token": getCsrfToken(),
             },
+            credentials: "same-origin",
             body: buffer
         })
     }
