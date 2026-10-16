@@ -1,0 +1,33 @@
+{% macro navLink(href, icon, label, currentPath) %}
+    <a class="sidebar-link {{ 'active' if currentPath == href else '' }}" href="{{ href }}"
+       {% if currentPath == href %}aria-current="page"{% endif %}>
+        <i class="bi bi-{{ icon }}"></i>
+        <span>{{ label }}</span>
+    </a>
+{% endmacro %}
+{# на широких экранах - обычная колонка слева, на узких - выезжающее меню (offcanvas) по кнопке в шапке #}
+<aside class="offcanvas-lg offcanvas-start app-sidebar" tabindex="-1" id="sidebar" aria-label="Навигация">
+    <div class="offcanvas-header">
+        <a class="brand" href="/">
+            <img src="/img/logo.svg" alt="" class="brand-logo" width="32" height="32">
+            <span class="brand-name">buhaltyt</span>
+        </a>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"
+                aria-label="Закрыть"></button>
+    </div>
+    <div class="offcanvas-body sidebar-body">
+        <nav class="sidebar-nav">
+            {{ navLink("/", "house-door", "Главная", currentPath) }}
+            {{ navLink("/feed", "fire", "Лента", currentPath) }}
+            {{ navLink("/upload", "plus-circle", "Новый пост", currentPath) }}
+            {{ navLink("/account", "person-circle", "Профиль", currentPath) }}
+        </nav>
+        <hr class="sidebar-divider">
+        <div class="sidebar-section">Аккаунт</div>
+        <nav class="sidebar-nav">
+            {{ navLink("/login", "box-arrow-in-right", "Войти", currentPath) }}
+            {{ navLink("/register", "person-plus", "Регистрация", currentPath) }}
+        </nav>
+        {% include "includes/footer.njk" %}
+    </div>
+</aside>

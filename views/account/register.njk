@@ -1,6 +1,7 @@
 {% extends "base.njk" %}
 
 {% block css %}
+    <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/register.css">
 {% endblock %}
 
@@ -9,10 +10,12 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container form">
-        <div class="row justify-content-center">
-            <form method="post" id="form" novalidate>
-                <h2>Регистрация</h2>
+    <div class="auth">
+        <div class="auth-card">
+            <img src="/img/logo.svg" alt="" class="auth-logo" width="48" height="48">
+            <h1 class="auth-title">Регистрация</h1>
+            <p class="auth-subtitle">Пара полей - и вы в компании.</p>
+            <form method="post" id="form" class="auth-form" novalidate>
                 <label for="email" class="visually-hidden">email</label>
                 <input
                         type="text"
@@ -20,7 +23,7 @@
                         autocomplete="email"
                         inputmode="email"
                         id="email"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control form-control-pill"
                         placeholder="email"
                         value="{{ formData.email }}"
                         required
@@ -31,7 +34,7 @@
                         name="username"
                         autocomplete="username"
                         id="username"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control form-control-pill"
                         placeholder="Имя пользователя"
                         value="{{ formData.username }}"
                         required
@@ -43,43 +46,42 @@
                         autocomplete="tel"
                         inputmode="tel"
                         id="phone"
-                        class="form-control rounded-pill mb-2"
+                        class="form-control form-control-pill"
                         placeholder="Номер телефона"
                         value="{{ formData.phone }}"
                         required
                 >
-                <div class="password-wrapper position-relative">
-                    <label for="password" class="visually-hidden">Пароль</label>
-                    <input
-                            type="password"
-                            name="password"
-                            autocomplete="new-password"
-                            id="password"
-                            class="form-control rounded-pill password-input mb-3 pe-5"
-                            placeholder="Пароль"
-                            value="{{ formData.password }}"
-                            required
-                    >
+                <div>
+                    <div class="password-field">
+                        <label for="password" class="visually-hidden">Пароль</label>
+                        <input
+                                type="password"
+                                name="password"
+                                autocomplete="new-password"
+                                id="password"
+                                class="form-control form-control-pill"
+                                placeholder="Пароль"
+                                value="{{ formData.password }}"
+                                required
+                        >
+                        <button type="button" class="eye" id="eye-button" aria-label="Показать пароль">
+                            <i class="bi bi-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
                     <progress
                             id="progress"
                             value="0"
                             max="100"
                             class="password-progress"
+                            aria-label="Надёжность пароля"
                             hidden
                     ></progress>
-                    <button
-                            type="button"
-                            class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-3 eye"
-                            id="eye-button"
-                    >
-                        <i class="bi bi-eye fs-5" id="eye-icon"></i>
-                    </button>
+                    <p class="password-hint">Минимум 10 символов: строчные и заглавные буквы, цифра и спецсимвол.</p>
                 </div>
-                <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">
-                    Зарегистрироваться
-                </button>
-                <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
+                <button type="submit" class="btn btn-pill btn-accent btn-auth">Зарегистрироваться</button>
+                <div class="alert alert-danger mb-0" id="error" role="alert" hidden></div>
             </form>
+            <p class="auth-switch">Уже есть аккаунт? <a href="/login">Войти</a></p>
         </div>
     </div>
 {% endblock %}

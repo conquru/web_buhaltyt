@@ -1,91 +1,387 @@
-.btn-like {
-    border: none;
-    background: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
+/* ===== строка "Создать пост" над лентой ===== */
+
+.create-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #666;
+    gap: 10px;
+    padding: 8px 8px 8px 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--bh-border);
+    border-radius: 999px;
+    color: var(--bh-text-2);
+    transition: border-color 0.15s ease;
 }
 
-.btn-like:hover {
-    background-color: #f0f0f0;
-    transform: scale(1.05);
+.create-bar:hover {
+    border-color: var(--bh-border-strong);
+    color: var(--bh-text-2);
 }
 
-.btn-like.liked {
-    color: #e74c3c;
+.create-bar-input {
+    flex: 1;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--bh-pill);
 }
 
-.btn-like.liked:hover {
-    background-color: #fbdada;
+.create-bar-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.25rem;
 }
 
-.like-icon {
-    font-size: 1.2em;
-    transition: transform 0.2s ease;
+.create-bar:hover .create-bar-icon {
+    background: var(--bh-hover);
 }
 
-.btn-like:active .like-icon {
-    transform: scale(1.3);
+/* ===== пост ===== */
+
+.post {
+    position: relative;
+    padding: 12px 16px;
+    border-radius: 16px;
+    transition: background 0.15s ease;
 }
 
-.like-count {
-    font-weight: 500;
-    font-size: 0.9em;
+.post:not(.is-open):hover {
+    background: var(--bh-hover);
 }
+
+.post + .post {
+    margin-top: 9px;
+}
+
+.post + .post::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 16px;
+    right: 16px;
+    border-top: 1px solid var(--bh-border);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--bh-text-2);
+}
+
+.post-author {
+    font-weight: 600;
+    color: var(--bh-text);
+}
+
+.post-title {
+    margin: 8px 0 4px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.post-text {
+    margin: 8px 0 12px;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* ===== фото в посте: 1, 2, 3 или сетка 2x2 с "+N" ===== */
 
 .image-grid {
     display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-
-.image-grid:has(.grid-item:only-child) {
-    grid-template-columns: 1fr;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.image-grid:has(.grid-item:nth-child(2):last-child) {
+    gap: 4px;
+    margin-bottom: 12px;
+    border: 1px solid var(--bh-border);
+    border-radius: 16px;
+    overflow: hidden;
     grid-template-columns: 1fr 1fr;
+    background: var(--bh-surface);
+}
+
+.grid-item {
+    position: relative;
+    aspect-ratio: 4 / 3;
 }
 
 .grid-item img {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-.btn-send {
-    height: 2.5rem;
-    width: 2.5rem;
+.image-grid[data-count="1"] {
+    grid-template-columns: 1fr;
+}
+
+.image-grid[data-count="1"] .grid-item {
+    aspect-ratio: auto;
+}
+
+.image-grid[data-count="1"] .grid-item img {
+    height: auto;
+    max-height: 540px;
+    object-fit: contain;
+}
+
+.image-grid[data-count="3"] .grid-item:first-child {
+    grid-row: span 2;
+    aspect-ratio: auto;
+}
+
+.grid-more {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 
-.btn-send i {
-    transform: translate(-1px, 1px);
-    font-size: 1.2rem;
-    margin: 0;
-    line-height: 1;
-}
+/* ===== кнопки под постом: лайк/дизлайк в одной "пилюле", комментарии ===== */
 
-.btn-comment {
-    border: none;
-    background: none;
-    padding: 2px 2px;
+.post-actions {
     display: flex;
     align-items: center;
-    gap: 6px;
-    color: #666;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.btn-comment.liked {
-    color: #e74c3c;
+.vote-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--bh-pill);
+}
+
+.vote-btn,
+.action-pill {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--bh-text);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.vote-btn .bi,
+.action-pill .bi {
+    font-size: 1rem;
+    transition: transform 0.15s ease;
+}
+
+.vote-btn:active .bi {
+    transform: scale(1.25);
+}
+
+.vote-like:hover {
+    background: var(--bh-pill-hover);
+    color: var(--bh-accent-text);
+}
+
+.vote-dislike:hover {
+    background: var(--bh-pill-hover);
+    color: var(--bh-dislike);
+}
+
+.vote-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--bh-border-strong);
+}
+
+.vote-pill.is-liked {
+    background: var(--bh-accent);
+}
+
+.vote-pill.is-disliked {
+    background: var(--bh-dislike);
+}
+
+.vote-pill.is-liked .vote-btn,
+.vote-pill.is-disliked .vote-btn {
+    color: #fff;
+}
+
+.vote-pill.is-liked .vote-btn:hover,
+.vote-pill.is-disliked .vote-btn:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.vote-pill.is-liked .vote-divider,
+.vote-pill.is-disliked .vote-divider {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.action-pill {
+    background: var(--bh-pill);
+}
+
+.action-pill:hover {
+    background: var(--bh-pill-hover);
+}
+
+.action-pill:disabled {
+    opacity: 0.55;
+}
+
+/* ===== поле "Добавить комментарий" ===== */
+
+.comment-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.comment-input {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--bh-border-strong);
+    background: var(--bh-bg);
+    color: var(--bh-text);
+}
+
+.comment-input::placeholder {
+    color: var(--bh-text-2);
+}
+
+.comment-input:focus {
+    border-color: var(--bh-text-2);
+    background: var(--bh-bg);
+    color: var(--bh-text);
+    box-shadow: none;
+}
+
+/* ===== комментарии в виде веток, как на Reddit ===== */
+
+.comments {
+    margin-top: 16px;
+}
+
+.comment {
+    display: flex;
+    gap: 8px;
+}
+
+.comment + .comment {
+    margin-top: 4px;
+}
+
+.comment-gutter {
+    flex: 0 0 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.comment-child .comment-gutter {
+    flex-basis: 24px;
+}
+
+.thread-line {
+    flex: 1;
+    width: 2px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background: var(--bh-border);
+}
+
+.comment-gutter:hover .thread-line {
+    background: var(--bh-border-strong);
+}
+
+.comment-main {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 4px;
+}
+
+.comment-meta {
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--bh-text-2);
+}
+
+.comment-child .comment-meta {
+    min-height: 24px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--bh-text);
+}
+
+.reply-arrow {
+    font-size: 0.625rem;
+}
+
+.comment-text {
+    margin: 0 0 2px;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: -8px;
+}
+
+.comment-action {
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--bh-text-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.comment-action .bi {
+    font-size: 0.9375rem;
+}
+
+.comment-action:hover {
+    background: var(--bh-hover);
+    color: var(--bh-text);
+}
+
+.comment-action.is-liked {
+    color: var(--bh-accent-text);
+}
+
+.comment-action.is-disliked {
+    color: var(--bh-dislike);
+}
+
+.comment-child {
+    margin-top: 8px;
 }

@@ -67,6 +67,12 @@ app.use(express.raw({ type: "application/octet-stream", limit: "2mb" }))
 app.use(doubleCsrfProtection)
 app.use(csrfToken)
 
+// для подсветки текущего раздела в боковом меню (views/includes/sidebar.njk)
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path
+    next()
+})
+
 app.use("/", main_router)
 app.use("/", login_router)
 app.use("/", upload_router)

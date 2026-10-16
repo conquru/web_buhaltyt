@@ -1,29 +1,94 @@
-.btn-upload {
-    height: 2.5rem;
-    width: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
+.composer {
+    padding: 16px;
+    border: 1px solid var(--bh-border);
+    border-radius: 16px;
 }
 
-.btn-upload i {
-    font-size: 1.25rem;
-    margin: 0;
-    line-height: 1;
-}
-
-textarea {
-    width: 100%;
+.composer-text {
+    min-height: 140px;
+    padding: 12px 16px;
+    border: 1px solid var(--bh-border-strong);
+    border-radius: 12px;
+    background: var(--bh-bg);
+    color: var(--bh-text);
     overflow: hidden;
     resize: none;
 }
 
-#preview-file::-webkit-scrollbar, #preview-img::-webkit-scrollbar {
+.composer-text::placeholder {
+    color: var(--bh-text-2);
+}
+
+.composer-text:focus {
+    border-color: var(--bh-text-2);
+    background: var(--bh-bg);
+    color: var(--bh-text);
+    box-shadow: none;
+}
+
+.dropzone {
+    width: 100%;
+    margin-top: 12px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 2px dashed var(--bh-border-strong);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--bh-text-2);
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.dropzone .bi {
+    font-size: 1.75rem;
+}
+
+.dropzone:hover,
+.dropzone.is-dragover {
+    border-color: var(--bh-accent);
+    background: var(--bh-accent-soft);
+    color: var(--bh-text);
+}
+
+.dropzone-link {
+    color: var(--bh-accent-text);
+    font-weight: 600;
+}
+
+.preview-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    overflow-x: auto;
+}
+
+.preview-strip:empty {
+    display: none;
+}
+
+.preview-thumb {
+    flex: none;
+    height: 112px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.preview-strip::-webkit-scrollbar {
     height: 6px;
 }
 
-#preview-file::-webkit-scrollbar-thumb, #preview-img::-webkit-scrollbar-thumb {
-    background: #bbb;
+.preview-strip::-webkit-scrollbar-thumb {
+    background: var(--bh-border-strong);
     border-radius: 4px;
+}
+
+.composer-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
 }

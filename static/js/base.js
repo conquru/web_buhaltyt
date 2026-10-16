@@ -1,16 +1,13 @@
 function togglePassword() {
     const passwordInput = document.getElementById("password")
+    const eyeButton = document.getElementById("eye-button")
     const eyeIcon = document.getElementById("eye-icon")
+    const isHidden = passwordInput.type === "password"
 
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text"
-        eyeIcon.className = "bi bi-eye-slash fs-5"
-        eyeIcon.style.color = "#0d6efd"
-    } else {
-        passwordInput.type = "password"
-        eyeIcon.className = "bi bi-eye fs-5"
-        eyeIcon.style.color = ""
-    }
+    passwordInput.type = isHidden ? "text" : "password"
+    eyeIcon.className = isHidden ? "bi bi-eye-slash" : "bi bi-eye"
+    eyeButton.classList.toggle("active", isHidden) // цвет задаётся в base.css (.eye.active)
+    eyeButton.setAttribute("aria-label", isHidden ? "Скрыть пароль" : "Показать пароль")
 }
 
 // CSP запрещает onclick="..." в разметке, поэтому обработчик вешаем отсюда

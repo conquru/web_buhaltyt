@@ -1,9 +1,12 @@
 {% extends "base.njk" %}
 
 {% block content %}
-    <div class="text-center mt-5">
-        <h1 class="display-4">{{ status }}</h1>
-        <p class="lead">{{ message }}</p>
-        <a class="btn btn-primary rounded-pill" href="/">На главную</a>
+    <div class="error-page">
+        <div class="error-code">{{ status }}</div>
+        <p class="hero-text mx-auto mt-3">{{ message }}</p>
+        <div class="d-flex justify-content-center gap-2">
+            <a class="btn btn-pill btn-accent" href="/">На главную</a>
+            <a class="btn btn-pill btn-soft" href="/feed">В ленту</a>
+        </div>
     </div>
 {% endblock %}

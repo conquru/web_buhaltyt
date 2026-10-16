@@ -1,6 +1,26 @@
 {% extends "base.njk" %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
-    <p>buhalтут пока ничего нет...</p>
+    <div class="page">
+        <div class="page-content">
+            <section class="hero">
+                <img src="/img/logo.svg" alt="" width="64" height="64">
+                <h1 class="hero-title">buhaltyt</h1>
+                <p class="hero-text">Лента для своей компании: делитесь постами и фото, обсуждайте в комментариях.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-pill btn-accent" href="/feed">
+                        <i class="bi bi-fire"></i>
+                        <span>Открыть ленту</span>
+                    </a>
+                    <a class="btn btn-pill btn-soft" href="/register">Создать аккаунт</a>
+                </div>
+            </section>
+            <div class="empty-state">
+                <i class="bi bi-cup-straw"></i>
+                <p class="empty-state-title">buhalтут пока ничего нет...</p>
+                <p class="mb-0">Загляните в <a href="/feed">ленту</a> или <a href="/upload">создайте первый пост</a>.</p>
+            </div>
+        </div>
+        {% include "includes/aside.njk" %}
+    </div>
 {% endblock %}

@@ -1,106 +1,160 @@
-img.avatar {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
+/* ===== карточка профиля ===== */
+
+.profile-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bh-surface);
+    margin-bottom: 8px;
 }
 
-input.avatar {
-    display: none;
+.profile-banner {
+    height: 112px;
+    background: linear-gradient(120deg, #d4400a, #ff8a3d 55%, #ffc46b);
 }
 
-h3.avatar {
-    margin: 5px 0 10px 15px;
+.profile-body {
+    padding: 0 20px 20px;
 }
 
-.btn-danger img {
-    filter: invert(1);
-    width: 27px;
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    margin-top: -48px;
+    border: 4px solid var(--bh-surface);
 }
 
-.form-label {
-    margin-left: 2%;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.alert {
-    margin-top: 10px;
-}
-
-h3.photo, h3.statistics {
-    margin: 30px 0 30px 15px;
-}
-
-.last {
-    width: 200px;
-    height: 100px;
-    text-decoration: none;
-    background-color: #989898;
-}
-
-.last button {
-    width: 50px;
-    height: 50px;
-    margin: auto;
+.profile-name-row {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
 }
 
-.last button::before {
-    content: ">";
-    font-family: monospace;
-    font-size: 40px;
-    padding: 0 0 3px 2px;
+.profile-name {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
-div.statistics {
-    width: 25%;
+.profile-username {
+    margin: 0 0 12px;
+    color: var(--bh-text-2);
+    font-weight: 500;
 }
 
-div.statistics div {
-    border-color: #989898;
-    margin-bottom: 15px;
+.profile-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
-progress.statistics {
-    margin: 0 auto 10px;
-    width: 80%;
+.profile-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--bh-pill);
+    font-size: 0.8125rem;
+    font-weight: 600;
 }
 
-label {
-    margin-left: 0.8rem;
-}
-
-.bi-sm {
-    height: 1.8rem;
-    width: 1.8rem;
-    font-size: 0.8em;
+.profile-details {
+    margin: 0;
     padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    font-size: 0.875rem;
+    color: var(--bh-text-2);
 }
+
+.profile-details li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile-avatar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.profile-form {
+    margin-top: 16px;
+}
+
+.profile-form-grid {
+    display: grid;
+    gap: 12px;
+}
+
+@media (min-width: 576px) {
+    .profile-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* вкладки над публикациями */
+.profile-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 16px 0 12px;
+}
+
+.profile-tab {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--bh-text-2);
+}
+
+.profile-tab.active {
+    background: var(--bh-pill);
+    color: var(--bh-text);
+}
+
+/* ===== плавающие кнопки "Наверх" и "Новый пост" (классы visible/show ставит static/js/account.js) ===== */
 
 .buttons {
     position: fixed;
-    right: 2.5%;
-    bottom: 5%;
+    right: 24px;
+    bottom: 24px;
     z-index: 1000;
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
+}
+
+.btn-floating {
+    height: 48px;
+    min-width: 48px;
+    gap: 0;
+    padding: 0 14px;
+    box-shadow: var(--bh-shadow);
+}
+
+.btn-floating .bi {
+    font-size: 1.25rem;
 }
 
 .action-btn {
-    display: flex;
-    align-items: center;
-
     opacity: 0;
     transform: translateY(20px) scale(0.7);
     pointer-events: none;
 
     transition:
-            opacity 0.25s ease,
-            transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        opacity 0.25s ease,
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .action-btn.visible {
@@ -110,7 +164,6 @@ label {
 }
 
 .hint {
-    font-size: 1rem;
     white-space: nowrap;
     overflow: hidden;
 
@@ -119,9 +172,9 @@ label {
     transform: translateX(-5px);
 
     transition:
-            max-width 0.6s ease,
-            opacity 0.4s ease,
-            transform 0.6s ease;
+        max-width 0.6s ease,
+        opacity 0.4s ease,
+        transform 0.6s ease;
 }
 
 .action-btn.show .hint {
@@ -131,9 +184,9 @@ label {
     margin-left: 0.5rem;
 
     transition:
-            max-width 0.6s ease,
-            opacity 0.2s ease,
-            transform 0.6s ease;
+        max-width 0.6s ease,
+        opacity 0.2s ease,
+        transform 0.6s ease;
 }
 
 .action-btn .bi {

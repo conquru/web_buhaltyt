@@ -5,13 +5,23 @@
 {% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-center mb-3">
-        <a class="btn btn-secondary rounded-5" href="/upload">
-            <i class="bi bi-plus-circle"></i>
-            <span class="me-1">Новый пост</span>
-        </a>
+    <div class="page">
+        <div class="page-content">
+            <a class="create-bar" href="/upload">
+                <img src="/img/avatar.png" alt="" class="avatar avatar-lg">
+                <span class="create-bar-input">Что нового?</span>
+                <span class="create-bar-icon"><i class="bi bi-image"></i></span>
+            </a>
+            {% for post in posts %}
+                {% include "includes/post.njk" %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-cup-straw"></i>
+                    <p class="empty-state-title">Постов пока нет</p>
+                    <p class="mb-0">Будьте первым - расскажите, что у вас нового.</p>
+                </div>
+            {% endfor %}
+        </div>
+        {% include "includes/aside.njk" %}
     </div>
-    {% for post in posts %}
-        {% include "includes/post.njk" %}
-    {% endfor %}
 {% endblock %}

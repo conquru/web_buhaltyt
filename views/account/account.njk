@@ -1,118 +1,140 @@
 {% extends "base.njk" %}
 
 {% block css %}
-    <link rel="stylesheet" href="css/account.css">
     <link rel="stylesheet" href="/css/feed.css">
+    <link rel="stylesheet" href="/css/account.css">
 {% endblock %}
 
 {% block content %}
     {% set formData = formData | merge(user) %}
-    <div class="d-flex">
-        <div class="flex-shrink-1">
-            <img class="rounded-circle avatar mb-2" src="/{{ formData.avatar }}" alt="Аватар" id="avatar">
-            <div id="personal">
-                <div class="d-flex justify-content-start align-items-center mb-3">
-                    <h3 class="me-2" data-field="name">{{ formData.name }}</h3>
-                    <button class="btn btn-primary rounded-circle bi-sm" id="edit-btn">
-                        <i class="bi bi-pencil"></i>
-                    </button>
+    <div class="page">
+        <div class="page-content">
+            <section class="profile-card">
+                <div class="profile-banner"></div>
+                <div class="profile-body">
+                    <img class="avatar profile-avatar" src="/{{ formData.avatar }}" alt="Аватар" id="avatar">
+                    {# data-field читает static/js/account.js, чтобы понять, изменились ли данные #}
+                    <div id="personal">
+                        <div class="profile-name-row">
+                            <h1 class="profile-name" data-field="name">{{ formData.name }}</h1>
+                            <button class="btn btn-icon btn-soft btn-sm-pill" type="button" id="edit-btn"
+                                    aria-label="Редактировать профиль">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
+                        <p class="profile-username">@<span data-field="username">{{ formData.username }}</span></p>
+                        <div class="profile-stats">
+                            <span class="profile-stat"><i class="bi bi-people"></i>{{ formData.subscribersText }}</span>
+                            <span class="profile-stat"><i class="bi bi-person-check"></i>{{ formData.subscriptionsText }}</span>
+                        </div>
+                        <ul class="profile-details">
+                            <li><i class="bi bi-envelope"></i><span data-field="email">{{ formData.email }}</span></li>
+                            <li><i class="bi bi-telephone"></i><span data-field="phone">{{ formData.phone }}</span></li>
+                        </ul>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" id="avatar-form" class="profile-avatar-actions"
+                          novalidate hidden>
+                        <input type="file" name="avatar" id="avatar-input" accept="image/*" hidden>
+                        <button id="change-btn" class="btn btn-pill btn-soft btn-sm-pill" type="button">
+                            <i class="bi bi-camera"></i>
+                            <span>Сменить аватар</span>
+                        </button>
+                        <button id="delete-btn" class="btn btn-pill btn-danger-soft btn-sm-pill" type="button">
+                            <i class="bi bi-trash3"></i>
+                            <span>Удалить</span>
+                        </button>
+                    </form>
+                    <form method="post" id="account-form" class="profile-form" novalidate hidden>
+                        <div class="profile-form-grid">
+                            <div>
+                                <label class="field-label" for="name">Имя</label>
+                                <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        class="form-control form-control-pill"
+                                        placeholder="Имя"
+                                        value="{{ formData.name }}"
+                                        required
+                                >
+                            </div>
+                            <div>
+                                <label class="field-label" for="username">Имя пользователя</label>
+                                <input
+                                        type="text"
+                                        name="username"
+                                        id="username"
+                                        class="form-control form-control-pill"
+                                        placeholder="Имя пользователя"
+                                        value="{{ formData.username }}"
+                                        required
+                                >
+                            </div>
+                            <div>
+                                <label class="field-label" for="email">email</label>
+                                <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        class="form-control form-control-pill"
+                                        placeholder="email"
+                                        value="{{ formData.email }}"
+                                        required
+                                        disabled
+                                >
+                            </div>
+                            <div>
+                                <label class="field-label" for="phone">Номер телефона</label>
+                                <input
+                                        type="tel"
+                                        name="phone"
+                                        id="phone"
+                                        class="form-control form-control-pill"
+                                        placeholder="Номер телефона"
+                                        value="{{ formData.phone }}"
+                                        required
+                                        disabled
+                                >
+                            </div>
+                        </div>
+                        <button class="btn btn-pill btn-accent mt-3" id="submit-btn" type="submit">
+                            <i class="bi bi-check-lg"></i>
+                            <span>Сохранить</span>
+                        </button>
+                    </form>
+                    <div class="alert alert-danger mt-3 mb-0" id="error" role="alert" hidden></div>
                 </div>
-                <p class="grey">
-                    <i class="bi bi-person me-1"></i>
-                    <span data-field="username">{{ formData.username }}</span>
-                </p>
-                <p class="grey">
-                    <i class="bi bi-envelope me-1"></i>
-                    <span data-field="email">{{ formData.email }}</span>
-                </p>
-                <p class="grey">
-                    <i class="bi bi-telephone me-1"></i>
-                    <span data-field="phone">{{ formData.phone }}</span>
-                </p>
-                <p class="grey mt-3">
-                    <i class="bi bi-people me-1"></i>
-                    <span>{{ formData.subscribersText }} · {{ formData.subscriptionsText }}</span>
-                </p>
+            </section>
+
+            <div class="profile-tabs">
+                <span class="profile-tab active">Публикации</span>
             </div>
-            <form method="post" enctype="multipart/form-data" id="avatar-form" novalidate hidden>
-                <input type="file" name="avatar" id="avatar-input" accept="image/*" hidden>
-                <button id="change-btn" class="btn btn-secondary rounded-pill">Сменить аватар</button>
-                <button id="delete-btn" class="btn btn-danger rounded-pill">Удалить аватар</button>
-            </form>
-            <form method="post" id="account-form" class="mt-2" novalidate hidden>
-                <label for="name">Имя</label>
-                <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        class="form-control rounded-pill mb-2"
-                        placeholder="Имя"
-                        value="{{ formData.name }}"
-                        required
-                >
-                <label for="username">Имя пользователя</label>
-                <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        class="form-control rounded-pill mb-2"
-                        placeholder="Имя пользователя"
-                        value="{{ formData.username }}"
-                        required
-                >
-                <label for="email">email</label>
-                <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        class="form-control rounded-pill mb-2"
-                        placeholder="email"
-                        value="{{ formData.email }}"
-                        required
-                        disabled
-                >
-                <label for="phone">Номер телефона</label>
-                <input
-                        type="tel"
-                        name="phone"
-                        id="phone"
-                        class="form-control rounded-pill mb-2"
-                        placeholder="Номер телефона"
-                        value="{{ formData.phone }}"
-                        required
-                        disabled
-                >
-                <button class="btn btn-primary rounded-pill mt-2" id="submit-btn" type="submit">
-                    <i class="bi bi-check-lg"></i>
-                    <span>Сохранить</span>
-                </button>
-            </form>
-            <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
-        </div>
-        <div class="flex-grow-1">
-            <div class="d-flex justify-content-center mb-3">
-                <a class="btn btn-secondary rounded-5" href="/upload" id="new-btn">
-                    <i class="bi bi-plus-circle"></i>
-                    <span class="me-1">Новый пост</span>
-                </a>
-            </div>
+
+            {# по этой ссылке IntersectionObserver в account.js решает, показывать ли плавающую кнопку #}
+            <a class="create-bar" href="/upload" id="new-btn">
+                <img src="/{{ formData.avatar }}" alt="" class="avatar avatar-lg">
+                <span class="create-bar-input">Новый пост</span>
+                <span class="create-bar-icon"><i class="bi bi-image"></i></span>
+            </a>
             {% for post in posts %}
                 {% include "includes/post.njk" %}
             {% endfor %}
         </div>
-        <div class="buttons">
-            <button class="btn btn-secondary rounded-5 action-btn" id="up-btn">
-                <i class="bi bi-arrow-up-circle fs-4"></i>
-                <span class="hint" id="up-hint">Наверх</span>
-            </button>
-            <a class="btn btn-secondary rounded-5 me-2 action-btn" id="upload-btn" href="/upload">
-                <i class="bi bi-plus-circle fs-4"></i>
-                <span class="hint" id="upload-hint">Новый пост</span>
-            </a>
-        </div>
+        {% include "includes/aside.njk" %}
+    </div>
+
+    <div class="buttons">
+        <button class="btn btn-pill btn-soft btn-floating action-btn" type="button" id="up-btn">
+            <i class="bi bi-arrow-up"></i>
+            <span class="hint" id="up-hint">Наверх</span>
+        </button>
+        <a class="btn btn-pill btn-accent btn-floating action-btn" id="upload-btn" href="/upload">
+            <i class="bi bi-plus-lg"></i>
+            <span class="hint" id="upload-hint">Новый пост</span>
+        </a>
     </div>
 {% endblock %}
 
 {% block js %}
-    <script src="js/account.js"></script>
+    <script src="/js/account.js"></script>
 {% endblock %}

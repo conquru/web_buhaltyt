@@ -1,21 +1,21 @@
-<header>
-    <nav class="navbar navbar-expand-lg fixed-top mx-3 mt-2 rounded-4 border-grey border-2">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="img/logo.png" alt="buhaltyt_logo" class="logo">
-            </a>
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#mainNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="nav nav-pills mx-auto"></ul>
-                <div class="btn-group gap-2">
-                    <a class="btn border border-dark rounded-pill" href="/login">Войти</a>
-                    <a class="btn btn-primary rounded-pill" href="/register">Зарегистрироваться</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<header class="app-header">
+    <button class="btn btn-icon btn-ghost d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+            aria-controls="sidebar" aria-label="Меню">
+        <i class="bi bi-list"></i>
+    </button>
+    <a class="brand" href="/">
+        <img src="/img/logo.svg" alt="" class="brand-logo" width="32" height="32">
+        <span class="brand-name">buhaltyt</span>
+    </a>
+    <div class="header-actions">
+        <a class="btn btn-pill btn-ghost d-none d-md-inline-flex" href="/upload">
+            <i class="bi bi-plus-lg"></i>
+            <span>Создать</span>
+        </a>
+        <button class="btn btn-icon btn-ghost" type="button" id="theme-toggle" aria-label="Тёмная тема">
+            <i class="bi bi-moon-stars"></i>
+        </button>
+        <a class="btn btn-pill btn-soft" href="/login">Войти</a>
+        <a class="btn btn-pill btn-accent d-none d-sm-inline-flex" href="/register">Регистрация</a>
+    </div>
 </header>

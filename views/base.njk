@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="white">
+<html lang="ru" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.1, shrink-to-fit=no, maximum-scale=1.5">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrfToken }}">
+        <script src="/js/theme.js"></script>
+        <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+        <link rel="preload" href="/fonts/inter/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/ico/bootstrap-icons/bootstrap-icons.css">
         <link rel="stylesheet" href="/css/base.css">
         {% block css %}{% endblock %}
-        <title>{{ title }}</title>
+        <title>{{ title }} · buhaltyt</title>
     </head>
-    <body class="d-flex flex-column min-vh-100" data-websocket="{{ websocket }}">
+    <body data-websocket="{{ websocket }}">
         {% include "includes/header.njk" %}
-        <main class="pt-5 flex-grow-1">
-            <div class="container">
+        <div class="app">
+            {% include "includes/sidebar.njk" %}
+            <main class="app-main">
                 {% block content %}{% endblock %}
-            </div>
-        </main>
-        {% include "includes/footer.njk" %}
+            </main>
+        </div>
         <script src="/js/bootstrap.bundle.min.js" defer></script>
         <script src="/js/base.js"></script>
         {% if websocket %}

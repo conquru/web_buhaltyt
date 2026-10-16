@@ -1,48 +1,51 @@
 {% extends "base.njk" %}
 
+{% block css %}
+    <link rel="stylesheet" href="/css/auth.css">
+{% endblock %}
+
 {% block js %}
     <script src="/js/login.js"></script>
 {% endblock %}
 
 {% block content %}
-    <div class="container form">
-        <div class="row justify-content-center">
-            <form method="post" id="form" novalidate>
-                <h2>Вход</h2>
+    <div class="auth">
+        <div class="auth-card">
+            <img src="/img/logo.svg" alt="" class="auth-logo" width="48" height="48">
+            <h1 class="auth-title">Вход</h1>
+            <p class="auth-subtitle">Рады видеть снова! Войдите по логину, почте или телефону.</p>
+            <form method="post" id="form" class="auth-form" novalidate>
                 <label for="login" class="visually-hidden">Логин</label>
                 <input
                         type="text"
                         name="login"
                         id="login"
-                        class="form-control rounded-pill mb-2"
-                        placeholder="Логин"
+                        autocomplete="username"
+                        class="form-control form-control-pill"
+                        placeholder="Логин, email или телефон"
                         value="{{ formData.login }}"
                         required
                 >
-                <div class="position-relative">
+                <div class="password-field">
                     <label for="password" class="visually-hidden">Пароль</label>
                     <input
                             type="password"
                             name="password"
                             id="password"
-                            class="form-control rounded-pill mb-3 pe-5"
+                            autocomplete="current-password"
+                            class="form-control form-control-pill"
                             placeholder="Пароль"
                             value="{{ formData.password }}"
                             required
                     >
-                    <button
-                            type="button"
-                            class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-3 eye"
-                            id="eye-button"
-                    >
-                        <i class="bi bi-eye fs-5" id="eye-icon"></i>
+                    <button type="button" class="eye" id="eye-button" aria-label="Показать пароль">
+                        <i class="bi bi-eye" id="eye-icon"></i>
                     </button>
                 </div>
-                <button type="submit" class="btn btn-primary rounded-pill form-control mb-2">
-                    Войти
-                </button>
-                <div class="alert alert-danger rounded-4" id="error" role="alert" hidden></div>
+                <button type="submit" class="btn btn-pill btn-accent btn-auth">Войти</button>
+                <div class="alert alert-danger mb-0" id="error" role="alert" hidden></div>
             </form>
+            <p class="auth-switch">Впервые здесь? <a href="/register">Зарегистрироваться</a></p>
         </div>
     </div>
 {% endblock %}

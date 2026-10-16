@@ -73,12 +73,29 @@ image.addEventListener("change", () => {
         const img = document.createElement("img")
 
         img.src = URL.createObjectURL(file)
-        img.className = "rounded-4 mt-3 mb-2"
-        img.style.height = "120px"
+        img.className = "preview-thumb"
+        img.alt = ""
         img.onload = () => URL.revokeObjectURL(img.src)
 
         previewImg.appendChild(img)
     })
+})
+
+// перетаскивание фото в зону загрузки: подставляем файлы в тот же input, дальше работает обработчик change
+imageBtn.addEventListener("dragover", (e) => {
+    e.preventDefault()
+    imageBtn.classList.add("is-dragover")
+})
+
+imageBtn.addEventListener("dragleave", () => {
+    imageBtn.classList.remove("is-dragover")
+})
+
+imageBtn.addEventListener("drop", (e) => {
+    e.preventDefault()
+    imageBtn.classList.remove("is-dragover")
+    image.files = e.dataTransfer.files
+    image.dispatchEvent(new Event("change"))
 })
 
 adjustHeight(textarea)

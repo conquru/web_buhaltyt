@@ -1,49 +1,571 @@
-nav {
-    background-color: #eee;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.175);
-    transition: box-shadow 0.3s ease;
+/* ===== шрифт: Inter лежит в static/fonts, без внешних CDN (их не пустит CSP) ===== */
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("/fonts/inter/inter-cyrillic-wght-normal.woff2") format("woff2-variations");
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
-nav:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.175) !important;
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("/fonts/inter/inter-latin-wght-normal.woff2") format("woff2-variations");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+        U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-.logo {
-    height: 24px;
-    width: auto;
+/* ===== цвета: светлая и тёмная тема (переключатель в шапке, static/js/theme.js) ===== */
+
+:root,
+[data-bs-theme="light"] {
+    --bh-bg: #ffffff;
+    --bh-surface: #f6f7f8;
+    --bh-hover: #f2f4f5;
+    --bh-border: #e3e8ea;
+    --bh-border-strong: #cbd4d8;
+    --bh-text: #0f1a1c;
+    --bh-text-2: #5c6c74;
+    --bh-pill: #e5ebee;
+    --bh-pill-hover: #d4dde1;
+    --bh-accent: #d4400a;
+    --bh-accent-hover: #b83608;
+    --bh-accent-text: #c2410c;
+    --bh-accent-soft: #fff1ea;
+    --bh-dislike: #6a5cff;
+    --bh-shadow: 0 8px 24px rgba(15, 26, 28, 0.12);
+
+    --bs-body-bg: var(--bh-bg);
+    --bs-body-color: var(--bh-text);
+    --bs-secondary-color: var(--bh-text-2);
+    --bs-border-color: var(--bh-border-strong);
+    --bs-link-color: var(--bh-accent-text);
+    --bs-link-hover-color: var(--bh-accent-hover);
+    --bs-link-color-rgb: 194, 65, 12;
+    --bs-link-hover-color-rgb: 184, 54, 8;
 }
 
-.form {
-    text-align: center;
-    width: 30%;
-    height: auto;
+[data-bs-theme="dark"] {
+    --bh-bg: #0e1113;
+    --bh-surface: #161b1e;
+    --bh-hover: #181e21;
+    --bh-border: #262f33;
+    --bh-border-strong: #3a464b;
+    --bh-text: #eef1f3;
+    --bh-text-2: #8ba2ad;
+    --bh-pill: #2a3236;
+    --bh-pill-hover: #343e43;
+    --bh-accent: #d4400a;
+    --bh-accent-hover: #e8541f;
+    --bh-accent-text: #ff8a5c;
+    --bh-accent-soft: #2b1a12;
+    --bh-dislike: #7c70ff;
+    --bh-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    --bs-body-bg: var(--bh-bg);
+    --bs-body-color: var(--bh-text);
+    --bs-secondary-color: var(--bh-text-2);
+    --bs-border-color: var(--bh-border-strong);
+    --bs-link-color: var(--bh-accent-text);
+    --bs-link-hover-color: #ffa47f;
+    --bs-link-color-rgb: 255, 138, 92;
+    --bs-link-hover-color-rgb: 255, 164, 127;
+}
+
+:root {
+    --header-height: 56px;
+    --sidebar-width: 272px;
+    --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bs-body-font-size: 0.9375rem;
+    --bs-body-line-height: 1.5;
+}
+
+body {
+    background: var(--bh-bg);
+    color: var(--bh-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+}
+
+.text-muted-2 {
+    color: var(--bh-text-2);
+}
+
+/* ===== шапка ===== */
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    background: var(--bh-bg);
+    border-bottom: 1px solid var(--bh-border);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bh-text);
+}
+
+.brand:hover {
+    color: var(--bh-text);
+}
+
+.brand-logo {
+    width: 32px;
+    height: 32px;
+}
+
+.brand-name {
+    font-size: 1.375rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== раскладка: меню слева, контент, правая колонка ===== */
+
+.app {
+    display: flex;
+    align-items: flex-start;
+}
+
+.app-main {
+    flex: 1;
+    min-width: 0;
+    padding: 16px 24px 64px;
+}
+
+.page {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 1096px;
     margin: 0 auto;
 }
 
-.eye {
-    border: none;
-    background: none;
+.page-content {
+    flex: 1;
+    min-width: 0;
+    max-width: 756px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 8px 0 16px;
+}
+
+.page-aside {
+    display: none;
+}
+
+@media (min-width: 1200px) {
+    .page-aside {
+        display: block;
+        flex: 0 0 316px;
+        position: sticky;
+        top: calc(var(--header-height) + 16px);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .app-main {
+        padding: 12px 12px 48px;
+    }
+}
+
+/* ===== боковое меню ===== */
+
+.app-sidebar {
+    --bs-offcanvas-width: var(--sidebar-width);
+    --bs-offcanvas-bg: var(--bh-bg);
+}
+
+.sidebar-body {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+@media (min-width: 992px) {
+    .app-sidebar {
+        flex: 0 0 var(--sidebar-width);
+        position: sticky;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--bh-border);
+    }
+
+    .app-sidebar .offcanvas-body.sidebar-body {
+        display: flex;
+        flex-grow: 1;
+        padding: 16px;
+    }
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 8px;
+    color: var(--bh-text);
+    font-weight: 500;
+}
+
+.sidebar-link .bi {
+    font-size: 1.25rem;
+}
+
+.sidebar-link:hover {
+    background: var(--bh-hover);
+    color: var(--bh-text);
+}
+
+.sidebar-link.active {
+    background: var(--bh-pill);
+    font-weight: 600;
+}
+
+.sidebar-divider {
+    margin: 12px 0;
+    border-color: var(--bh-border);
+    opacity: 1;
+}
+
+.sidebar-section {
+    padding: 4px 16px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bh-text-2);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 24px 16px 0;
+    font-size: 0.75rem;
+    color: var(--bh-text-2);
+}
+
+/* ===== кнопки ===== */
+
+.btn-pill,
+.btn-icon {
+    --bs-btn-font-weight: 600;
+    --bs-btn-font-size: 0.875rem;
+    --bs-btn-border-width: 0;
+    --bs-btn-focus-box-shadow: 0 0 0 3px rgba(212, 64, 10, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 40px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.btn-pill {
+    --bs-btn-padding-x: 16px;
+    --bs-btn-padding-y: 0;
+}
+
+.btn-icon {
+    width: 40px;
     padding: 0;
 }
 
-#eye-icon {
-    color: grey;
-    transition: all 0.5s ease;
+.btn-pill .bi,
+.btn-icon .bi {
+    font-size: 1.125rem;
+    line-height: 1;
 }
 
-.post-avatar {
-    height: 2.5rem;
-    width: 2.5rem;
+.btn-sm-pill {
+    height: 32px;
 }
 
-.grey {
-    color: #666;
+.btn-sm-pill.btn-icon {
+    width: 32px;
 }
 
-input.form-control {
-    height: 2.5rem;
+.btn-accent {
+    --bs-btn-bg: var(--bh-accent);
+    --bs-btn-color: #fff;
+    --bs-btn-hover-bg: var(--bh-accent-hover);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: var(--bh-accent-hover);
+    --bs-btn-active-color: #fff;
+    --bs-btn-disabled-bg: var(--bh-accent);
+    --bs-btn-disabled-color: #fff;
 }
 
-main {
-    margin-top: 2rem;
+.btn-soft {
+    --bs-btn-bg: var(--bh-pill);
+    --bs-btn-color: var(--bh-text);
+    --bs-btn-hover-bg: var(--bh-pill-hover);
+    --bs-btn-hover-color: var(--bh-text);
+    --bs-btn-active-bg: var(--bh-pill-hover);
+    --bs-btn-active-color: var(--bh-text);
+}
+
+.btn-ghost {
+    --bs-btn-bg: transparent;
+    --bs-btn-color: var(--bh-text);
+    --bs-btn-hover-bg: var(--bh-hover);
+    --bs-btn-hover-color: var(--bh-text);
+    --bs-btn-active-bg: var(--bh-pill);
+    --bs-btn-active-color: var(--bh-text);
+}
+
+.btn-danger-soft {
+    --bs-btn-bg: transparent;
+    --bs-btn-color: #e5484d;
+    --bs-btn-hover-bg: rgba(229, 72, 77, 0.12);
+    --bs-btn-hover-color: #e5484d;
+    --bs-btn-active-bg: rgba(229, 72, 77, 0.2);
+    --bs-btn-active-color: #e5484d;
+}
+
+/* ===== поля ввода ===== */
+
+.form-control-pill {
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: var(--bh-pill);
+    color: var(--bh-text);
+}
+
+.form-control-pill::placeholder {
+    color: var(--bh-text-2);
+}
+
+.form-control-pill:focus {
+    border-color: var(--bh-border-strong);
+    background: var(--bh-bg);
+    color: var(--bh-text);
+    box-shadow: 0 0 0 3px rgba(212, 64, 10, 0.18);
+}
+
+.form-control-pill:disabled {
+    opacity: 0.6;
+    background: var(--bh-pill);
+}
+
+.field-label {
+    display: block;
+    margin: 0 0 6px 16px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--bh-text-2);
+}
+
+/* кнопка "глаз" внутри поля пароля */
+.password-field {
+    position: relative;
+}
+
+.password-field .form-control-pill {
+    padding-right: 52px;
+}
+
+.eye {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--bh-text-2);
+    font-size: 1.125rem;
+    transition: color 0.2s ease;
+}
+
+.eye:hover {
+    background: var(--bh-pill-hover);
+}
+
+.eye.active {
+    color: var(--bh-accent-text);
+}
+
+.alert {
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+/* ===== аватары и общие карточки ===== */
+
+.avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bh-pill);
+    flex: none;
+}
+
+.avatar-sm {
+    width: 24px;
+    height: 24px;
+}
+
+.avatar-md {
+    width: 32px;
+    height: 32px;
+}
+
+.avatar-lg {
+    width: 40px;
+    height: 40px;
+}
+
+.aside-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bh-surface);
+}
+
+.aside-banner {
+    height: 56px;
+    background: linear-gradient(120deg, #d4400a, #ff8a3d 55%, #ffc46b);
+}
+
+.aside-card-body {
+    padding: 16px;
+}
+
+.aside-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: -36px 0 8px;
+}
+
+.aside-brand img {
+    border: 3px solid var(--bh-surface);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+}
+
+.aside-title {
+    margin: 26px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.aside-text {
+    font-size: 0.875rem;
+    color: var(--bh-text-2);
+}
+
+/* пустые состояния и крупные заголовки (главная, ошибки) */
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 40px 32px;
+    border-radius: 24px;
+    background: var(--bh-surface);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 138, 61, 0.35), transparent 70%);
+    pointer-events: none;
+}
+
+.hero-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 16px 0 8px;
+}
+
+.hero-text {
+    max-width: 480px;
+    font-size: 1.0625rem;
+    color: var(--bh-text-2);
+    margin-bottom: 24px;
+}
+
+.empty-state {
+    margin-top: 16px;
+    padding: 40px 24px;
+    border: 1px dashed var(--bh-border-strong);
+    border-radius: 16px;
+    text-align: center;
+    color: var(--bh-text-2);
+}
+
+.empty-state .bi {
+    font-size: 2rem;
+    color: var(--bh-text-2);
+}
+
+.empty-state-title {
+    margin: 8px 0 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--bh-text);
+}
+
+.error-page {
+    max-width: 480px;
+    margin: 64px auto;
+    text-align: center;
+}
+
+.error-code {
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--bh-accent-text);
 }
