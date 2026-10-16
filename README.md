@@ -2,98 +2,77 @@
 
 Лента для своей компании: посты с фото, лайки и комментарии.
 
-Стек: Node.js, Express 5, шаблоны Nunjucks, Bootstrap 5, WebSocket (`ws`), обработка фото через `sharp`.
+Для запуска нужны **Node.js 20.9 или новее** и **Git**. MySQL пока не нужен.
 
-## Быстрый старт
+## Linux
 
-Нужен **Node.js 20.9 или новее** (проверить: `node -v`) и npm.
-MySQL для запуска пока не нужен: в этой версии данные тестовые и лежат прямо в коде.
+1. Проверьте версию Node.js:
 
-```bash
-git clone https://github.com/conquru/web_buhaltyt.git
-cd web_buhaltyt
-git switch version-0.1
-npm install
-cp template.env .env
-```
+    ```bash
+    node -v
+    ```
 
-Откройте `.env` и замените `change_me` у `SESSION_SECRET`, `CSRF_SECRET` и `COOKIE_SECRET` на случайные строки.
-Сгенерировать строку можно так (запустите по разу на каждый секрет):
+    Если Node.js нет или версия ниже 20.9, установите его через [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) и выполните `nvm install --lts`.
 
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
+2. Скачайте проект и установите зависимости:
 
-Запуск:
+    ```bash
+    git clone https://github.com/conquru/web_buhaltyt.git
+    cd web_buhaltyt
+    git switch version-0.1
+    npm install
+    ```
 
-```bash
-npm start
-```
+3. Создайте файл настроек и заполните секреты случайными значениями:
 
-Сайт откроется на http://localhost:3000. Остановить сервер: `Ctrl+C`.
+    ```bash
+    cp template.env .env
+    for name in SESSION_SECRET CSRF_SECRET COOKIE_SECRET; do sed -i "s/^$name=change_me$/$name=$(node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))")/" .env; done
+    ```
 
-## Тестовые аккаунты
+4. Запустите сервер:
 
-Пока база не подключена, вход проверяется по списку в `src/validators.js`:
+    ```bash
+    npm start
+    ```
 
-| Логин  | Email         | Телефон     | Пароль   |
-| ------ | ------------- | ----------- | -------- |
-| `pisa` | pisa@mail.com | 80000000000 | `123456` |
-| `popa` | popa@mail.com | 81111111111 | `qwerty` |
+5. Откройте http://localhost:3000. Остановить сервер: `Ctrl+C`.
 
-Регистрация тоже пока ничего не сохраняет, а только проверяет поля.
+## Windows
 
-## Настройки `.env`
+1. Установите [Node.js LTS](https://nodejs.org/) (версия 20.9 или новее) и [Git for Windows](https://git-scm.com/download/win). При установке оставьте настройки по умолчанию.
 
-`.env` лежит в `.gitignore` и в репозиторий не попадает. Шаблон со всеми переменными - `template.env`.
+2. Откройте **Командную строку** (Win+R → `cmd` → Enter) и скачайте проект:
 
-| Переменная            | Зачем                                                                                                    |
-| --------------------- | -------------------------------------------------------------------------------------------------------- |
-| `SESSION_SECRET`      | подпись cookie сессии. **Обязательна**, без неё сервер не запустится                                     |
-| `CSRF_SECRET`         | подпись CSRF-токенов. **Обязательна**                                                                    |
-| `COOKIE_SECRET`       | подпись прочих cookie                                                                                    |
-| `PORT`, `HOST`        | где слушает сервер, по умолчанию `3000` и `0.0.0.0`                                                      |
-| `NODE_ENV`            | `development` - шаблоны обновляются без перезапуска; `production` - cookie только по https               |
-| `TRUST_PROXY`         | `true`, если сервер стоит за nginx или другим прокси                                                     |
-| `DB_*`                | доступ к MySQL, понадобится после подключения базы                                                       |
-| `MULTIPLE_STATEMENTS` | `true` нужно только скрипту инициализации БД, для приложения - `false`                                   |
-| `PEPPER`              | «перец» для хеширования паролей. Задайте один раз и не меняйте, иначе старые пароли перестанут подходить |
+    ```bat
+    git clone https://github.com/conquru/web_buhaltyt.git
+    cd web_buhaltyt
+    git switch version-0.1
+    npm install
+    ```
 
-Настоящие пароли и секреты храните только в `.env`, не в коде и не в `template.env`: репозиторий публичный.
+3. Создайте файл настроек:
 
-## Структура
+    ```bat
+    copy template.env .env
+    ```
 
-```
-app.js              настройка Express: middleware, роуты, обработчик ошибок
-bin/www             запуск HTTP- и WebSocket-сервера, чтение .env
-routes/             страницы и API: лента, вход, регистрация, профиль, загрузка фото
-src/                логика: безопасность (security.js), WebSocket, валидаторы, форматирование дат
-database/           SQL-процедуры и скрипты для MySQL (пока не подключены)
-views/              шаблоны Nunjucks; общий каркас - base.njk, части - includes/
-static/             CSS, JS, иконки, шрифт Inter, картинки
-media/              загруженные фото, создаётся автоматически и в git не попадает
-```
+4. Сгенерируйте секрет - команда выведет случайную строку:
 
-## Безопасность
+    ```bat
+    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+    ```
 
-Вся настройка - в `src/security.js`:
+    Откройте файл командой `notepad .env` и замените `change_me` у `SESSION_SECRET`, `CSRF_SECRET` и `COOKIE_SECRET` на такие строки - для каждого запустите команду заново. Сохраните файл.
 
-- **CSRF-токен** приходит на страницу в `<meta name="csrf-token">`. Каждый `fetch` с методом POST должен передавать его в заголовке `x-csrf-token`, функция для этого - `getCsrfToken()` из `static/js/base.js`. Обычные формы передают токен скрытым полем `_csrf`.
-- **Заголовки безопасности** через `helmet`, включая CSP: inline-скрипты и `onclick="..."` в разметке не сработают, обработчики вешайте через `addEventListener`.
-- **Ограничение попыток**: на `POST /login` и `/register` - 20 запросов за 15 минут с одного IP.
+5. Запустите сервер:
 
-## Частые проблемы
+    ```bat
+    npm start
+    ```
 
-- **`Не задана переменная SESSION_SECRET`** - нет `.env` или переменная в нём пустая, см. «Быстрый старт». При `NODE_ENV=production` сервер не запустится и с `change_me` из шаблона.
-- **`Port 3000 is already in use`** - порт занят другим процессом. Остановите его или поменяйте `PORT` в `.env`.
-- **«Сессия устарела, обновите страницу»** - CSRF-токен не подошёл, например после перезапуска сервера. Обновите страницу.
-- **Пустые рамки вместо фото в ленте** - тестовые посты ссылаются на файлы, которых нет в `media/`. Загрузите свои фото через «Новый пост».
-- **`npm audit` показывает уязвимость в `braces`** - она касается слежения за файлами шаблонов в режиме разработки, через сайт её не использовать. Не запускайте `npm audit fix --force`: он поставит несовместимую версию `chokidar`.
+6. Откройте http://localhost:3000. Остановить сервер: `Ctrl+C`.
 
-## Форматирование кода
+## Вход
 
-В проекте настроен Prettier (`.prettierrc`):
-
-```bash
-npx prettier --write .
-```
+Пока база не подключена, войти можно тестовым аккаунтом: логин `pisa`, пароль `123456`.
