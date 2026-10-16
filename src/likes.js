@@ -1,8 +1,8 @@
 function likes(object, user) {
-    if (user.id in object.likes) {
+    if (object.likes.includes(user.id)) {
         object.isLiked = true
         object.isDisliked = false
-    } else if (user.id in object.dislikes) {
+    } else if (object.dislikes.includes(user.id)) {
         object.isLiked = false
         object.isDisliked = true
     } else {

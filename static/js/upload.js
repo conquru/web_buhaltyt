@@ -24,12 +24,29 @@ submitBtn.addEventListener("click", (e) => {
     e.preventDefault()
 
     if (!textarea.checkValidity()) {
-        error.innerHTML = "Текст поста не может быть пустым"
+        error.textContent = "Текст поста не может быть пустым"
         error.hidden = false
         return
     }
 
-    form.submit()
+    // multipart-форма разбирается уже после CSRF-проверки, поэтому токен передаём заголовком
+    fetch("/upload", {
+        method: "POST",
+        headers: {
+            "x-csrf-token": getCsrfToken(),
+        },
+        credentials: "same-origin",
+        body: new FormData(form),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.success && data.redirect) {
+                window.location.href = data.redirect
+                return
+            }
+            error.textContent = data.message
+            error.hidden = false
+        })
 })
 
 image.addEventListener("change", () => {

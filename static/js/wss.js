@@ -2,22 +2,27 @@ let ws
 let need_ws
 let reconnectTimer
 
-function send(state) {
+// пока сокет не открыт, ws.send бросает исключение, поэтому все сообщения идут через эту функцию
+function sendJson(data) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(
-            JSON.stringify({
-                type: "activity",
-                state,
-                ts: Date.now(),
-            }),
-        )
+        ws.send(JSON.stringify(data))
     }
+}
+
+function send(state) {
+    sendJson({
+        type: "activity",
+        state,
+        ts: Date.now(),
+    })
 }
 
 function initWebSocket() {
     if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return
 
-    ws = new WebSocket("ws://localhost:3000")
+    // тот же хост, что у страницы; на https - зашифрованный wss
+    const protocol = location.protocol === "https:" ? "wss:" : "ws:"
+    ws = new WebSocket(`${protocol}//${location.host}`)
 
     ws.onopen = () => {
         console.log("подключено")
@@ -33,24 +38,8 @@ function initWebSocket() {
         const data = JSON.parse(event.data)
         if (data.type === "unique") {
             const field = document.getElementById("error")
-            field.innerHTML = data.err ? "это имя уже занято" : ""
+            field.textContent = data.err ? "это имя уже занято" : ""
             field.hidden = !data.err
-        } else if (data.type === "password") {
-            const field = document.getElementById("error")
-            const progress = document.getElementById("progress")
-            const color = {
-                red: ["#ef4444", "#f97316", "0"],
-                orange: ["#f97316", "#facc15", "0"],
-                green: ["#22c55e", "#16a34a", "999px"],
-            }
-
-            field.innerHTML = data.err
-            field.hidden = !data.err
-
-            progress.setAttribute("value", data.progress)
-            progress.style.setProperty("--c1", color[data.color][0])
-            progress.style.setProperty("--c2", color[data.color][1])
-            progress.style.setProperty("--c3", color[data.color][2])
         } else {
             console.log(data)
         }

@@ -13,9 +13,10 @@ function togglePassword() {
     }
 }
 
+// CSP запрещает onclick="..." в разметке, поэтому обработчик вешаем отсюда
+document.getElementById("eye-button")?.addEventListener("click", togglePassword)
+
+// cookie с токеном httpOnly и из JS не читается, сервер кладёт копию токена в <meta> страницы
 function getCsrfToken() {
-    return document.cookie
-        .split("; ")
-        .find(c => c.startsWith("__Host-csrf="))
-        ?.split("=")[1]
+    return document.querySelector('meta[name="csrf-token"]')?.content
 }

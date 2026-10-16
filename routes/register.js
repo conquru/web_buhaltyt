@@ -1,4 +1,5 @@
 const express = require("express")
+const { authLimiter } = require("../src/security")
 const { registerValidator } = require("../src/validators")
 const wss = require("../src/websocket")
 const router = express.Router()
@@ -11,7 +12,7 @@ router.get("/register", (req, res) => {
     }
 })
 
-router.post("/register", (req, res) => {
+router.post("/register", authLimiter, (req, res) => {
     const error = registerValidator(req.body)
 
     if (error) {

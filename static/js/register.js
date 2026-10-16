@@ -4,24 +4,36 @@ const username = document.getElementById("username")
 const password = document.getElementById("password")
 const progress = document.getElementById("progress")
 
+// пароль никуда не отправляется, пока не нажата кнопка: сила считается прямо в браузере
+// правила совпадают с validatePassword из src/check-password.js: зелёный = сервер такой пароль примет
+const SPECIAL_CHARS = /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/
+const PASSWORD_LEVELS = {
+    red: { value: 33, colors: ["#ef4444", "#f97316", "0"] },
+    orange: { value: 66, colors: ["#f97316", "#facc15", "0"] },
+    green: { value: 100, colors: ["#22c55e", "#16a34a", "999px"] },
+}
+
+function levelPassword(value) {
+    const hasDigitsAndCases = /\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value)
+    if (value.length < 5 || !hasDigitsAndCases) return "red"
+    if (value.length < 10 || !SPECIAL_CHARS.test(value)) return "orange"
+    return "green"
+}
+
 username.addEventListener("input", () => {
-    ws.send(
-        JSON.stringify({
-            type: "unique",
-            field: username.id,
-            value: username.value,
-        }),
-    )
+    sendJson({
+        type: "unique",
+        field: username.id,
+        value: username.value,
+    })
 })
 
 password.addEventListener("input", () => {
-    ws.send(
-        JSON.stringify({
-            type: "password",
-            field: password.id,
-            value: password.value,
-        }),
-    )
+    const level = PASSWORD_LEVELS[levelPassword(password.value)]
+    progress.value = level.value
+    progress.style.setProperty("--c1", level.colors[0])
+    progress.style.setProperty("--c2", level.colors[1])
+    progress.style.setProperty("--c3", level.colors[2])
 })
 
 password.addEventListener("focus", () => {
@@ -36,7 +48,7 @@ form.addEventListener("submit", (e) => {
     e.preventDefault()
 
     if (!form.checkValidity()) {
-        error.innerHTML = "Заполните все поля"
+        error.textContent = "Заполните все поля"
         error.hidden = false
         return
     }
@@ -57,7 +69,7 @@ form.addEventListener("submit", (e) => {
                 window.location.href = data.redirect
                 return
             }
-            error.innerHTML = data.message
+            error.textContent = data.message
             error.hidden = false
         })
 })

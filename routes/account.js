@@ -1,3 +1,5 @@
+const path = require("path")
+const sharp = require("sharp")
 const express = require("express")
 const wss = require("../src/websocket")
 const getDiff = require("../src/get-diff-date")
@@ -5,6 +7,8 @@ const { accountValidator } = require("../src/validators")
 const formatUserCounters = require("../src/format-user-counters")
 
 const router = express.Router()
+const MAX_AVATAR_SIZE = 500 * 1024 // столько же проверяет static/js/account.js
+
 const user = {
     name: "Ириночка",
     avatar: "img/avatar.png",
@@ -38,10 +42,6 @@ router.get("/account", (req, res) => {
     }
 })
 
-router.post("/account", (req, res) => {
-    console.log(req.body)
-})
-
 router.post("/account/update", (req, res) => {
     const error = accountValidator(req.body)
 
@@ -58,15 +58,34 @@ router.post("/account/update", (req, res) => {
 })
 
 router.get("/account/avatar", (req, res) => {
-    return res.sendFile(user.avatar)
+    return res.sendFile(user.avatar, { root: path.join(__dirname, "..", "static") })
 })
 
-router.post("/account/avatar", (req, res) => {
+router.post("/account/avatar", async (req, res) => {
     const buffer = req.body // это Buffer
-    const base64 = Buffer.from(buffer).toString("base64") // конвертируем в Base64
+    if (!Buffer.isBuffer(buffer) || buffer.length === 0) {
+        return res.status(400).json({ success: false, message: "Файл не получен" })
+    }
+    if (buffer.length > MAX_AVATAR_SIZE) {
+        return res.status(413).json({ success: false, message: "Файл слишком большой" })
+    }
 
-    // Можно сохранить в файл или БД
-    // fs.writeFileSync("avatar.txt", base64)
+    // sharp заодно проверяет, что это действительно картинка, а не файл с подменённым типом
+    let avatar
+    try {
+        avatar = await sharp(buffer, { limitInputPixels: 50_000_000 })
+            .rotate()
+            .resize(256, 256, { fit: "cover" })
+            .webp({ quality: 80 })
+            .toBuffer()
+    } catch {
+        return res.status(400).json({ success: false, message: "Файл не является изображением" })
+    }
+
+    const base64 = avatar.toString("base64") // конвертируем в Base64
+    // сохранение base64 в бд (users.avatar_base64)
+
+    return res.json({ success: true })
 })
 
 router.get("/logout", (req, res) => {

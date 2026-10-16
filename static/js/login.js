@@ -5,7 +5,7 @@ form.addEventListener("submit", (e) => {
     e.preventDefault()
 
     if (!form.checkValidity()) {
-        error.innerHTML = "Заполните все поля"
+        error.textContent = "Заполните все поля"
         error.hidden = false
         return
     }
@@ -26,7 +26,7 @@ form.addEventListener("submit", (e) => {
                 window.location.href = data.redirect
                 return
             }
-            error.innerHTML = data.message
+            error.textContent = data.message
             error.hidden = false
         })
 })

@@ -1,12 +1,13 @@
 // database/database-functions.js
 const mysql = require('mysql2/promise');
 
+// доступы берутся из .env (см. template.env), в коде их хранить нельзя - репозиторий публичный
 const dbConfig = {
-    host: '127.0.0.1',
-    port: 3303,
-    user: 'root',
-    password: 'original0982',
-    database: 'web_buh',
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10
 };

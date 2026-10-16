@@ -1,4 +1,5 @@
 const express = require("express")
+const { authLimiter } = require("../src/security")
 const { loginValidator } = require("../src/validators")
 const router = express.Router()
 
@@ -6,7 +7,7 @@ router.get("/login", (req, res) => {
     return res.render("account/login", { title: "Вход", formData: {}, websocket: false })
 })
 
-router.post("/login", (req, res) => {
+router.post("/login", authLimiter, (req, res) => {
     const error = loginValidator(req.body)
     if (error) {
         return res.json({

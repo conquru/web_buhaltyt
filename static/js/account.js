@@ -54,20 +54,18 @@ editBtn.addEventListener("click", () => {
 })
 
 username.addEventListener("input", () => {
-    ws.send(
-        JSON.stringify({
-            type: "unique",
-            field: username.id,
-            value: username.value,
-        }),
-    )
+    sendJson({
+        type: "unique",
+        field: username.id,
+        value: username.value,
+    })
 })
 
 accountForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
     if (!accountForm.checkValidity()) {
-        error.innerHTML = "Заполните все поля"
+        error.textContent = "Заполните все поля"
         error.hidden = false
         return
     }
@@ -105,13 +103,13 @@ accountForm.addEventListener("submit", async (e) => {
                 avatarForm.hidden = true
                 personal.hidden = false
             } else {
-                error.innerHTML = data.message
+                error.textContent = data.message
                 error.hidden = false
             }
         })
 
-    if (avatarFlag) { // флаг для отправки аватара в бд
-        const file = avatarInput.files[0]
+    const file = avatarInput.files[0]
+    if (avatarFlag && file) { // флаг для отправки аватара в бд; после "Удалить аватар" файла может не быть
         const buffer = await file.arrayBuffer()
 
         await fetch("/account/avatar", {

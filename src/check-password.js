@@ -8,23 +8,4 @@ function validatePassword(password) {
     return null
 }
 
-function levelPassword(password) {
-    if (
-        password.length < 5 ||
-        !/\d/.test(password) ||
-        !/[a-z]/.test(password) ||
-        !/[A-Z]/.test(password)
-    ) return "red"
-
-    if (
-        password.length < 8 ||
-        !/\d/.test(password) ||
-        !/[a-z]/.test(password) ||
-        !/[A-Z]/.test(password) ||
-        !/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(password)
-    ) return "orange"
-
-    return "green"
-}
-
-module.exports = { validatePassword, levelPassword }
+module.exports = { validatePassword }
